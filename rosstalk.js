@@ -14,13 +14,20 @@ function instance(system, id, config) {
 	return self;
 }
 
+instance.prototype.updateConfig = function(config) {
+	var self = this;
+
+	self.config = config;
+	self.init_tcp();
+};
+
 instance.prototype.init = function() {
 	var self = this;
 
 	debug = self.debug;
 	log = self.log;
 
-	self.status(1,'Connecting'); // status ok!
+	self.status(self.STATE_UNKNOWN);
 
 	self.init_tcp();
 };
@@ -29,7 +36,8 @@ instance.prototype.init_tcp = function() {
 	var self = this;
 
 	if (self.socket !== undefined) {
-		self.socket.unload();
+		self.socket.destroy();
+		delete self.socket;
 	}
 
 	if (self.config.host) {
@@ -41,12 +49,12 @@ instance.prototype.init_tcp = function() {
 
 		self.socket.on('error', function (err) {
 			debug("Network error", err);
-			self.status(2,err);
+			self.status(self.STATE_ERROR, err);
 			self.log('error',"Network error: " + err.message);
 		});
 
 		self.socket.on('connect', function () {
-			self.status(0);
+			self.status(self.STATE_OK);
 			debug("Connected");
 		})
 
@@ -73,7 +81,7 @@ instance.prototype.destroy = function() {
 	var self = this;
 
 	if (self.socket !== undefined) {
-		self.socket.unload();
+		self.socket.destroy();
 	}
 
 	debug("destroy", self.id);;
@@ -250,15 +258,6 @@ instance.prototype.action = function(action) {
 	}
 
 	if (cmd !== undefined) {
-
-		if (self.socket === undefined) {
-			self.init_tcp();
-		}
-
-		// TODO: remove this when issue #71 is fixed
-		if (self.socket !== undefined && self.socket.host != self.config.host) {
-			self.init_tcp();
-		}
 
 		debug('sending tcp',cmd,"to",self.config.host);
 
