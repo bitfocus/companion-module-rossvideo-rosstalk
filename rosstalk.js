@@ -67,9 +67,16 @@ instance.prototype.config_fields = function () {
 	var self = this;
 	return [
 		{
+			type: 'text',
+			id: 'info',
+			width: 12,
+			label: 'Information',
+			value: 'To make sense of the input and output names available in the actions provided by this module, you might want to read the bottom of <a href="http://help.rossvideo.com/carbonite-device/Topics/Protocol/RossTalk/CNT/RT-CNT-Comm.html" target="_new">this reference manual</a>.'
+		},
+		{
 			type: 'textinput',
 			id: 'host',
-			label: 'Mixer IP',
+			label: 'Switcher Frame IP',
 			width: 6,
 			regex: self.REGEX_IP
 		},
