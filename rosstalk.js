@@ -207,10 +207,21 @@ instance.prototype.actions = function(system) {
 				},
 				{
 					type: 'dropdown',
-					label: 'Auto Transition',
-					id: 'autoTrans',
-					default: 'false',
-					choices: self.CHOICES_YESNO_BOOLEAN
+					label: 'Transition On/Off Air',
+					id: 'transD',
+					choices: [
+						{ id: 'ON',  label: 'Transition OnAir'},
+						{ id: 'OFF', label: 'Transition OffAir'}
+					]
+				},
+				{
+					type: 'dropdown',
+					label: 'Transition type',
+					id: 'transT',
+					choices: [
+						{ id: 'AUTO',  label: 'Auto Transition'},
+						{ id: 'CUT',   label: 'Cut Transition '}
+					]
 				}
 			]
 		},
@@ -223,6 +234,7 @@ instance.prototype.actions = function(system) {
 instance.prototype.action = function(action) {
 	var self = this;
 	var id = action.action;
+	var opt = action.options;
 
 	// parseInt(action.options.int)
 	var cmd;
@@ -230,18 +242,18 @@ instance.prototype.action = function(action) {
 	switch (action.action) {
 
 		case 'gpi':
-			var gpi = parseInt(action.options.gpi);
+			var gpi = parseInt(opt.gpi);
 			cmd = 'GPI ' + (gpi > 9 ? '' : '0') + gpi;
 			break;
 
 		case 'cc':
-			var cc = parseInt(action.options.cc);
-			cmd = 'CC ' + parseInt(action.options.bank) + ':' + (cc > 9 ? '' : '0') + cc;
+			var cc = parseInt(opt.cc);
+			cmd = 'CC ' + parseInt(opt.bank) + ':' + (cc > 9 ? '' : '0') + cc;
 			break;
 
 		case 'xpt':
-			var src = action.options.vidSource;
-			var dst = action.options.vidDest;
+			var src = opt.vidSource;
+			var dst = opt.vidDest;
 			cmd = 'XPT ' + dst + ':' + src;
 			console.log('ross xpt:', cmd);
 			break;
@@ -251,15 +263,19 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'loadset':
-			cmd = 'LOADSET ' + action.options.set;
+			cmd = 'LOADSET ' + opt.set;
 			break;
 
 		case 'cut':
-			cmd = 'MECUT ' + action.options.mle;
+			cmd = 'MECUT ' + opt.mle;
 			break;
 
 		case 'autotrans':
-			cmd = 'MEAUTO ' + action.options.mle;
+			cmd = 'MEAUTO ' + opt.mle;
+			break;
+
+		case 'transKey':
+			cmd = 'KEY'+ opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
 			break;
 
 	}
