@@ -297,11 +297,5 @@ instance.prototype.action = function(action) {
 
 };
 
-instance.module_info = {
-	label: 'ROSS Carbonite/Vision',
-	id: 'rosstalk',
-	version: '0.0.2'
-};
-
 instance_skel.extendedBy(instance);
 exports = module.exports = instance;
