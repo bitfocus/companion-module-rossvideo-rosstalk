@@ -209,6 +209,7 @@ instance.prototype.actions = function(system) {
 					type: 'dropdown',
 					label: 'Transition On/Off Air (On & Off options may not be available in all switchers)',
 					id: 'transD',
+					default: 'TOGGLE',
 					choices: [
 						{ id: 'TOGGLE',  label: 'Toggle Keyer'},
 						{ id: 'ON',  label: 'Transition OnAir'},
@@ -219,6 +220,7 @@ instance.prototype.actions = function(system) {
 					type: 'dropdown',
 					label: 'Transition type',
 					id: 'transT',
+					default: 'CUT',
 					choices: [
 						{ id: 'AUTO',  label: 'Auto Transition'},
 						{ id: 'CUT',   label: 'Cut Transition '}
