@@ -229,7 +229,214 @@ instance.prototype.actions = function(system) {
 			]
 		},
 
-		'ftb':		{ label: 	'Fade to black' }
+		'ftb':		{ label: 	'Fade to black' },
+
+		'CLFB': {
+			label:'Clear Framebuffer',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'layer (OPTIONAL)',
+					id: 'layer',
+					default: '',
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'CLRA': { label:'Clear All Framebuffers'},
+
+		'CUE': {
+			label:'Cue Take ID',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'frameBuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'layer',
+					id: 'layer',
+					default: '',
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'DOWN': { label:'Move sequencer focus down one'},
+
+		'FOCUS': {
+			label:'Cue Take ID',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'LAYEROFF': {
+			label:'Take Layer Offline',
+			options: [
+				{
+					type: 'textinput',
+					label: 'frameBuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'Layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'NEXT': { label:'Take current take item on air and advance'},
+
+		'READ': { label:'Take current selection in sequencer on air'},
+
+		'RESUME': {
+			label:'Resume layer(s) in framebuffer',
+			options: [
+				{
+					type: 'textinput',
+					label: 'frameBuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer (OPTIONAL)',
+					id: 'Layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'SEQI': {
+			label:'Loads take item on air to specified layer',
+			options: [
+				{
+					type: 'textinput',
+					label: 'take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'Layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'SEQO': {
+			label:'Takes take item off air',
+			options: [
+				{
+					type: 'textinput',
+					label: 'take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'SWAP': {
+			label:'Laods all take items that are currently cued to air in framebuffer specified',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'TAKE': {
+			label:'Takes take item on specified framebuffer and layer',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
+		'UP': { label:'Move sequencer focus up'},
+
+		'UPNEXT': {
+			label:'Sets preview to the take item specified without moving focus',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				
+			]
+		},
+
 
 	});
 }
@@ -284,6 +491,84 @@ instance.prototype.action = function(action) {
 				cmd = 'KEY'+ opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
 			}
 			break;
+
+		case 'CLFB':
+			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
+			var layer = opt.layer;
+			if ( layer !== '' ) {
+				cmd = 'CLFB'+ frameBuffer + ' ' + opt.layer;
+			} else {
+				cmd = 'CLFB'+ frameBuffer;
+			}
+			break;
+
+		case 'CLRA':
+			cmd = 'CLRA';
+			break;
+
+		case 'DOWN':
+			cmd = 'DOWN';
+			break;
+
+		case 'FOCUS':
+			var takeID = opt.takeID;
+			cmd = 'FOCUS ' + takeID;
+			break;
+
+		case 'LAYEROFF':
+			var layer = opt.layer;
+			cmd = 'LAYEROFF ' + layer;
+			break;
+
+		case 'NEXT':
+			cmd = 'NEXT';
+			break;
+
+		case 'READ':
+			cmd 'READ';
+			break;
+
+		case 'RESUME' :
+			var frameBuffer = parseInt(opt.fb) - 1;
+			var layer = opt.layer;
+			if ( layer !== '' ) {
+				cmd = 'RESUME'+ frameBuffer + ' ' + layer;
+			} else {
+				cmd = 'RESUME'+ frameBuffer;
+			}
+			break;
+
+		case 'SEQI':
+			var takeID = opt.takeID;
+			var layer = opt.layer;
+			cmd = 'SEQI ' + takeID + ':' + layer;
+			break;
+
+		case 'SEQO' :
+			var takeID = opt.takeID;
+			cmd 'SEQI ' + takeID;
+			break;
+
+		case 'SWAP':
+			var frameBuffer = opt.fb;
+			cmd = 'SWAP ' + frameBuffer;
+
+		case 'TAKE':
+			var takeID = opt.takeID;
+			var frameBuffer = int(opt.fb) - 1;
+			var layer = opt.layer;
+			cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer;
+			break;
+
+		case 'UP':
+			cmd = 'UP';
+			break;
+
+		case 'UPNEXT':
+			var takeID = opt.takeID;
+			cmd = 'UPNEXT ' + takeID;
+			break;
+
 
 	}
 
