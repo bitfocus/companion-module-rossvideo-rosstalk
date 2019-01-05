@@ -100,7 +100,7 @@ instance.prototype.actions = function(system) {
 	self.system.emit('instance_actions', self.id, {
 
 		'gpi': {
-			label:'Trigger GPI',
+			label: 'Trigger GPI',
 			options: [
 				{
 					 type: 'textinput',
@@ -113,7 +113,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'cc': {
-			label:'Fire custom control',
+			label: 'Fire custom control',
 			options: [
 				{
 					 type: 'textinput',
@@ -133,7 +133,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'loadset': {
-			label:'Load Set',
+			label: 'Load Set',
 			options: [
 				{
 					type: 'textinput',
@@ -145,7 +145,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'cut': {
-			label:'Cut',
+			label: 'Cut',
 			options: [
 				{
 					type: 'textinput',
@@ -157,7 +157,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'autotrans': {
-			label:'Auto Transition',
+			label: 'Auto Transition',
 			options: [
 				{
 					type: 'textinput',
@@ -169,7 +169,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'xpt': {
-			label:'XPT',
+			label: 'XPT',
 			options: [
 				{
 					type: 'textinput',
@@ -229,7 +229,7 @@ instance.prototype.actions = function(system) {
 			]
 		},
 
-		'ftb':		{ label: 	'Fade to black' },
+		'ftb': { label: 'Fade to black' },
 
 		'CLFB': {
 			label:'Clear Framebuffer',
@@ -248,14 +248,14 @@ instance.prototype.actions = function(system) {
 					default: '',
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'CLRA': { label:'Clear All Framebuffers'},
 
 		'CUE': {
-			label:'Cue Take ID',
+			label: 'Cue Take ID',
 			options: [
 				{
 					type: 'textinput',
@@ -278,7 +278,7 @@ instance.prototype.actions = function(system) {
 					default: '',
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
@@ -294,7 +294,7 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
@@ -315,7 +315,7 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
@@ -324,7 +324,7 @@ instance.prototype.actions = function(system) {
 		'READ': { label:'Take current selection in sequencer on air'},
 
 		'RESUME': {
-			label:'Resume layer(s) in framebuffer',
+			label: 'Resume layer(s) in framebuffer',
 			options: [
 				{
 					type: 'textinput',
@@ -340,12 +340,12 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'SEQI': {
-			label:'Loads take item on air to specified layer',
+			label: 'Load take item on air to specified layer',
 			options: [
 				{
 					type: 'textinput',
@@ -361,12 +361,12 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'SEQO': {
-			label:'Takes take item off air',
+			label: 'Take item off air',
 			options: [
 				{
 					type: 'textinput',
@@ -375,12 +375,12 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'SWAP': {
-			label:'Laods all take items that are currently cued to air in framebuffer specified',
+			label: 'Load all take items that are cued to air in framebuffer',
 			options: [
 				{
 					type: 'textinput',
@@ -389,13 +389,14 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'TAKE': {
-			label:'Takes take item on specified framebuffer and layer',
+			label: 'Take item on specified framebuffer and layer',
 			options: [
+
 				{
 					type: 'textinput',
 					label: 'Take ID',
@@ -403,6 +404,7 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
+
 				{
 					type: 'textinput',
 					label: 'Framebuffer',
@@ -410,6 +412,7 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
+
 				{
 					type: 'textinput',
 					label: 'Layer',
@@ -417,14 +420,14 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
 		'UP': { label:'Move sequencer focus up'},
 
 		'UPNEXT': {
-			label:'Sets preview to the take item specified without moving focus',
+			label: 'Set preview to the take item specified without moving focus',
 			options: [
 				{
 					type: 'textinput',
@@ -433,7 +436,7 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-				
+
 			]
 		},
 
@@ -525,17 +528,20 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'READ':
-			cmd 'READ';
+			cmd = 'READ';
 			break;
 
 		case 'RESUME' :
 			var frameBuffer = parseInt(opt.fb) - 1;
 			var layer = opt.layer;
-			if ( layer !== '' ) {
+
+			if (layer !== '') {
 				cmd = 'RESUME'+ frameBuffer + ' ' + layer;
-			} else {
+			}
+			else {
 				cmd = 'RESUME'+ frameBuffer;
 			}
+
 			break;
 
 		case 'SEQI':
@@ -546,7 +552,7 @@ instance.prototype.action = function(action) {
 
 		case 'SEQO' :
 			var takeID = opt.takeID;
-			cmd 'SEQI ' + takeID;
+			cmd = 'SEQI ' + takeID;
 			break;
 
 		case 'SWAP':
@@ -569,7 +575,6 @@ instance.prototype.action = function(action) {
 			cmd = 'UPNEXT ' + takeID;
 			break;
 
-
 	}
 
 	if (cmd !== undefined) {
@@ -578,7 +583,8 @@ instance.prototype.action = function(action) {
 
 		if (self.socket !== undefined && self.socket.connected) {
 			self.socket.send(cmd + "\n");
-		} else {
+		}
+		else {
 			debug('Socket not connected :(');
 		}
 
