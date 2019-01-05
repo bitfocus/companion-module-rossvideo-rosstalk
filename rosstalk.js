@@ -207,9 +207,11 @@ instance.prototype.actions = function(system) {
 				},
 				{
 					type: 'dropdown',
-					label: 'Transition On/Off Air',
+					label: 'Transition On/Off Air (On & Off options may not be available in all switchers)',
 					id: 'transD',
+					default: 'TOGGLE',
 					choices: [
+						{ id: 'TOGGLE',  label: 'Toggle Keyer'},
 						{ id: 'ON',  label: 'Transition OnAir'},
 						{ id: 'OFF', label: 'Transition OffAir'}
 					]
@@ -218,6 +220,7 @@ instance.prototype.actions = function(system) {
 					type: 'dropdown',
 					label: 'Transition type',
 					id: 'transT',
+					default: 'CUT',
 					choices: [
 						{ id: 'AUTO',  label: 'Auto Transition'},
 						{ id: 'CUT',   label: 'Cut Transition '}
@@ -275,7 +278,11 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'transKey':
-			cmd = 'KEY'+ opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
+			if ( opt.transD === 'TOGGLE' ) {
+				cmd = 'KEY'+ opt.transT + ' ME:' + opt.mle + ':' + opt.key;
+			} else {
+				cmd = 'KEY'+ opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
+			}
 			break;
 
 	}
