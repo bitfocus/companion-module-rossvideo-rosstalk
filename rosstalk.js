@@ -232,13 +232,26 @@ instance.prototype.actions = function(system) {
 		'ftb': { label: 'Fade to black' },
 
 		'CLFB': {
-			label:'Clear Framebuffer',
+			label: 'Clear Framebuffer',
 			options: [
 				{
 					type: 'textinput',
 					label: 'Framebuffer',
 					id: 'fb',
-					default: 0,
+					default: 1,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'CLFB_layer': {
+			label: 'Clear Layer',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 1,
 					regex: self.REGEX_NUMBER
 				},
 				{
@@ -248,14 +261,13 @@ instance.prototype.actions = function(system) {
 					default: '',
 					regex: self.REGEX_NUMBER
 				},
-
 			]
 		},
 
-		'CLRA': { label:'Clear All Framebuffers'},
+		'CLRA': { label: 'Clear All Framebuffers'},
 
 		'CUE': {
-			label: 'Cue Take ID',
+			label: 'CUE',
 			options: [
 				{
 					type: 'textinput',
@@ -268,7 +280,7 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					label: 'frameBuffer',
 					id: 'fb',
-					default: 0,
+					default: 1,
 					regex: self.REGEX_NUMBER
 				},
 				{
@@ -278,14 +290,13 @@ instance.prototype.actions = function(system) {
 					default: '',
 					regex: self.REGEX_NUMBER
 				},
-
 			]
 		},
 
-		'DOWN': { label:'Move sequencer focus down one'},
+		'DOWN': { label: 'DOWN'},
 
 		'FOCUS': {
-			label:'Cue Take ID',
+			label: 'FOCUS',
 			options: [
 				{
 					type: 'textinput',
@@ -294,125 +305,19 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-
 			]
 		},
 
 		'LAYEROFF': {
-			label:'Take Layer Offline',
+			label: 'LAYEROFF',
 			options: [
 				{
 					type: 'textinput',
 					label: 'frameBuffer',
 					id: 'fb',
-					default: 0,
+					default: 1,
 					regex: self.REGEX_NUMBER
 				},
-				{
-					type: 'textinput',
-					label: 'Layer',
-					id: 'Layer',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-			]
-		},
-
-		'NEXT': { label:'Take current take item on air and advance'},
-
-		'READ': { label:'Take current selection in sequencer on air'},
-
-		'RESUME': {
-			label: 'Resume layer(s) in framebuffer',
-			options: [
-				{
-					type: 'textinput',
-					label: 'frameBuffer',
-					id: 'fb',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-				{
-					type: 'textinput',
-					label: 'Layer (OPTIONAL)',
-					id: 'Layer',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-			]
-		},
-
-		'SEQI': {
-			label: 'Load take item on air to specified layer',
-			options: [
-				{
-					type: 'textinput',
-					label: 'take ID',
-					id: 'takeID',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-				{
-					type: 'textinput',
-					label: 'Layer',
-					id: 'Layer',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-			]
-		},
-
-		'SEQO': {
-			label: 'Take item off air',
-			options: [
-				{
-					type: 'textinput',
-					label: 'take ID',
-					id: 'takeID',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-			]
-		},
-
-		'SWAP': {
-			label: 'Load all take items that are cued to air in framebuffer',
-			options: [
-				{
-					type: 'textinput',
-					label: 'Framebuffer',
-					id: 'fb',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-			]
-		},
-
-		'TAKE': {
-			label: 'Take item on specified framebuffer and layer',
-			options: [
-
-				{
-					type: 'textinput',
-					label: 'Take ID',
-					id: 'takeID',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
-				{
-					type: 'textinput',
-					label: 'Framebuffer',
-					id: 'fb',
-					default: 0,
-					regex: self.REGEX_NUMBER
-				},
-
 				{
 					type: 'textinput',
 					label: 'Layer',
@@ -420,14 +325,94 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
-
 			]
 		},
 
-		'UP': { label:'Move sequencer focus up'},
+		'NEXT': { label: 'NEXT'},
 
-		'UPNEXT': {
-			label: 'Set preview to the take item specified without moving focus',
+		'READ': { label: 'READ'},
+
+		'RESUME': {
+			label: 'RESUME FRAMEBUFFER',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 1,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'RESUME_layer': {
+			label: 'RESUME LAYER',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 1,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'SEQI': {
+			label: 'SEQI',
+			options: [
+				{
+					type: 'textinput',
+					label: 'take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'Layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'SEQO': {
+			label: 'SEQO',
+			options: [
+				{
+					type: 'textinput',
+					label: 'take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'SWAP': {
+			label: 'SWAP',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
+
+		'TAKE': {
+			label: 'TAKE',
 			options: [
 				{
 					type: 'textinput',
@@ -436,7 +421,35 @@ instance.prototype.actions = function(system) {
 					default: 0,
 					regex: self.REGEX_NUMBER
 				},
+				{
+					type: 'textinput',
+					label: 'Framebuffer',
+					id: 'fb',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+				{
+					type: 'textinput',
+					label: 'Layer',
+					id: 'layer',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
+			]
+		},
 
+		'UP': { label: 'UP'},
+
+		'UPNEXT': {
+			label: 'UPNEXT',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Take ID',
+					id: 'takeID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				},
 			]
 		},
 
@@ -497,12 +510,13 @@ instance.prototype.action = function(action) {
 
 		case 'CLFB':
 			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
+			cmd = 'CLFB '+ frameBuffer;
+			break;
+
+		case 'CLFB_layer':
+			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
 			var layer = opt.layer;
-			if ( layer !== '' ) {
-				cmd = 'CLFB'+ frameBuffer + ' ' + opt.layer;
-			} else {
-				cmd = 'CLFB'+ frameBuffer;
-			}
+			cmd = 'CLFB '+ frameBuffer + ':' + opt.layer;
 			break;
 
 		case 'CLRA':
@@ -533,26 +547,25 @@ instance.prototype.action = function(action) {
 
 		case 'RESUME' :
 			var frameBuffer = parseInt(opt.fb) - 1;
-			var layer = opt.layer;
+			cmd = 'RESUME '+ frameBuffer;
+			break;
 
-			if (layer !== '') {
-				cmd = 'RESUME'+ frameBuffer + ' ' + layer;
-			}
-			else {
-				cmd = 'RESUME'+ frameBuffer;
-			}
+		case 'RESUME_layer' :
+			var frameBuffer = parseInt(opt.fb) - 1;
+			var layer       = opt.layer;
+			cmd = 'RESUME '+ frameBuffer + ':' + layer;
 
 			break;
 
 		case 'SEQI':
 			var takeID = opt.takeID;
-			var layer = opt.layer;
+			var layer  = opt.layer;
 			cmd = 'SEQI ' + takeID + ':' + layer;
 			break;
 
 		case 'SEQO' :
 			var takeID = opt.takeID;
-			cmd = 'SEQI ' + takeID;
+			cmd = 'SEQO ' + takeID;
 			break;
 
 		case 'SWAP':
@@ -560,9 +573,9 @@ instance.prototype.action = function(action) {
 			cmd = 'SWAP ' + frameBuffer;
 
 		case 'TAKE':
-			var takeID = opt.takeID;
-			var frameBuffer = int(opt.fb) - 1;
-			var layer = opt.layer;
+			var takeID      = opt.takeID;
+			var frameBuffer = parseInt(opt.fb) - 1;
+			var layer       = opt.layer;
 			cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer;
 			break;
 
@@ -574,7 +587,6 @@ instance.prototype.action = function(action) {
 			var takeID = opt.takeID;
 			cmd = 'UPNEXT ' + takeID;
 			break;
-
 	}
 
 	if (cmd !== undefined) {
