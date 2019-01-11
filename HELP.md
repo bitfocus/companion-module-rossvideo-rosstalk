@@ -12,3 +12,23 @@ To make sense of the input and output names available in the actions provided by
 * XPT
 * Transition Keyer
 * Fade to black
+
+**Available commands for Ross Expression**
+
+* CLFB buffer:layer
+* CLRA
+* CUE takeid:buffer:layer
+* DOWN
+* FOCUS takeid
+* GPI gpi
+* LAYEROFF buffer:layer
+* NEXT
+* READ
+* RESUME buffer
+* RESUME buffer:layer
+* SEQI takeid:layer
+* SEQO takeid
+* SWAP buffer
+* TAKE takeid:buffer:layer
+* UP
+* UPNEXT takeid

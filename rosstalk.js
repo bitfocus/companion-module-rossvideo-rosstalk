@@ -76,7 +76,7 @@ instance.prototype.config_fields = function () {
 		{
 			type: 'textinput',
 			id: 'host',
-			label: 'Switcher Frame IP',
+			label: 'Switcher Frame/Expression IP',
 			width: 6,
 			regex: self.REGEX_IP
 		},
