@@ -1,8 +1,8 @@
 {
   "name": "rosstalk",
-  "version": "1.2.1",
+  "version": "1.2.2",
 	"api_version": "1.0.0",
-	"keywords": [ "Protocol", "Vision Mixer" ],
+	"keywords": [ "Protocol", "Vision Mixer", "Expression" ],
 	"manufacturer": "Ross Video",
 	"product": "Rosstalk",
 	"shortname": "rosstalk",
