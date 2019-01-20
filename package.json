@@ -1,16 +1,20 @@
 {
-  "name": "rosstalk",
-  "version": "1.2.2",
+	"name": "rosstalk",
+	"version": "1.2.3",
 	"api_version": "1.0.0",
-	"keywords": [ "Protocol", "Vision Mixer", "Expression" ],
+	"keywords": [
+		"Protocol",
+		"Vision Mixer",
+		"Expression"
+	],
 	"manufacturer": "Ross Video",
 	"product": "Rosstalk",
 	"shortname": "rosstalk",
-  "description": "rosstalk plugin for Companion",
-  "main": "rosstalk.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "William Viker <william@bitfocus.io>",
-  "license": "ISC"
+	"description": "rosstalk plugin for Companion",
+	"main": "rosstalk.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "William Viker <william@bitfocus.io>",
+	"license": "MIT"
 }
