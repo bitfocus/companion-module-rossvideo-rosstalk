@@ -510,57 +510,57 @@ instance.prototype.action = function(action) {
 
 		case 'CLFB':
 			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
-			cmd = 'CLFB '+ frameBuffer;
+			cmd = 'CLFB '+ frameBuffer + "\r";
 			break;
 
 		case 'CLFB_layer':
 			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
 			var layer = opt.layer;
-			cmd = 'CLFB '+ frameBuffer + ':' + opt.layer;
+			cmd = 'CLFB '+ frameBuffer + ':' + opt.layer + "\r";
 			break;
 
 		case 'CLRA':
-			cmd = 'CLRA';
+			cmd = 'CLRA\r';
 			break;
 
 		case 'DOWN':
-			cmd = 'DOWN';
+			cmd = 'DOWN\r';
 			break;
 
 		case 'FOCUS':
 			var takeID = opt.takeID;
-			cmd = 'FOCUS ' + takeID;
+			cmd = 'FOCUS ' + takeID + "\r";
 			break;
 
 		case 'LAYEROFF':
 			var layer = opt.layer;
-			cmd = 'LAYEROFF ' + layer;
+			cmd = 'LAYEROFF ' + layer + "\r";
 			break;
 
 		case 'NEXT':
-			cmd = 'NEXT';
+			cmd = 'NEXT\r';
 			break;
 
 		case 'READ':
-			cmd = 'READ';
+			cmd = 'READ\r';
 			break;
 
 		case 'RESUME' :
 			var frameBuffer = parseInt(opt.fb) - 1;
-			cmd = 'RESUME '+ frameBuffer;
+			cmd = 'RESUME '+ frameBuffer + "\r";
 			break;
 
 		case 'RESUME_layer' :
 			var frameBuffer = parseInt(opt.fb) - 1;
 			var layer       = opt.layer;
-			cmd = 'RESUME '+ frameBuffer + ':' + layer;
+			cmd = 'RESUME '+ frameBuffer + ':' + layer + "\r";
 
 			break;
 
 		case 'SEQI':
 			var takeID = opt.takeID;
 			var layer  = opt.layer;
-			cmd = 'SEQI ' + takeID + ':' + layer;
+			cmd = 'SEQI ' + takeID + ':' + layer + "\r";
 			break;
 
 		case 'SEQO' :
@@ -570,22 +570,22 @@ instance.prototype.action = function(action) {
 
 		case 'SWAP':
 			var frameBuffer = opt.fb;
-			cmd = 'SWAP ' + frameBuffer;
+			cmd = 'SWAP ' + frameBuffer + "\r";
 
 		case 'TAKE':
 			var takeID      = opt.takeID;
 			var frameBuffer = parseInt(opt.fb) - 1;
 			var layer       = opt.layer;
-			cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer;
+			cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer + "\r";
 			break;
 
 		case 'UP':
-			cmd = 'UP';
+			cmd = 'UP\r';
 			break;
 
 		case 'UPNEXT':
 			var takeID = opt.takeID;
-			cmd = 'UPNEXT ' + takeID;
+			cmd = 'UPNEXT ' + takeID + "\r";
 			break;
 	}
 
