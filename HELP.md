@@ -13,7 +13,7 @@ To make sense of the input and output names available in the actions provided by
 * Transition Keyer
 * Fade to black
 
-**Available commands for Ross Expression**
+**Available commands for Ross Xpression**
 
 * CLFB buffer:layer
 * CLRA
