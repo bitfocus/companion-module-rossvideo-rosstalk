@@ -488,7 +488,12 @@ instance.prototype.action = function (action) {
 			break;
 
 		case 'gpiByName':
-			cmd = 'GPI ' + opt.gpi + ':' + opt.parameter;
+			if (opt.parameter === null) {
+				cmd = 'GPI ' + opt.gpi;
+			} else {
+				cmd = 'GPI ' + opt.gpi + ':' + opt.parameter;
+			}
+
 			break;
 
 		case 'cc':
