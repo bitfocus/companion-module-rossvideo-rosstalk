@@ -85,6 +85,7 @@ instance.prototype.config_fields = function () {
 			id: 'port',
 			label: 'Switcher Frame/XPression Port',
 			width: 6,
+			default: "7788",
 			regex: self.REGEX_NUMBER
 		},
 	]
