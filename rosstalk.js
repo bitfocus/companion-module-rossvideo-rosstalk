@@ -14,14 +14,14 @@ function instance(system, id, config) {
 	return self;
 }
 
-instance.prototype.updateConfig = function(config) {
+instance.prototype.updateConfig = function (config) {
 	var self = this;
 
 	self.config = config;
 	self.init_tcp();
 };
 
-instance.prototype.init = function() {
+instance.prototype.init = function () {
 	var self = this;
 
 	debug = self.debug;
@@ -32,7 +32,7 @@ instance.prototype.init = function() {
 	self.init_tcp();
 };
 
-instance.prototype.init_tcp = function() {
+instance.prototype.init_tcp = function () {
 	var self = this;
 
 	if (self.socket !== undefined) {
@@ -50,15 +50,15 @@ instance.prototype.init_tcp = function() {
 		self.socket.on('error', function (err) {
 			debug("Network error", err);
 			self.status(self.STATE_ERROR, err);
-			self.log('error',"Network error: " + err.message);
+			self.log('error', "Network error: " + err.message);
 		});
 
 		self.socket.on('connect', function () {
 			self.status(self.STATE_OK);
 			debug("Connected");
-		})
+		});
 
-		self.socket.on('data', function (data) {});
+		self.socket.on('data', function (data) { });
 	}
 };
 
@@ -79,23 +79,23 @@ instance.prototype.config_fields = function () {
 			label: 'Switcher Frame/XPression IP',
 			width: 6,
 			regex: self.REGEX_IP
-		},
-	]
+		}
+	];
 };
 
 // When module gets deleted
-instance.prototype.destroy = function() {
+instance.prototype.destroy = function () {
 	var self = this;
 
 	if (self.socket !== undefined) {
 		self.socket.destroy();
 	}
 
-	debug("destroy", self.id);;
+	debug("destroy", self.id);
 };
 
 
-instance.prototype.actions = function(system) {
+instance.prototype.actions = function (system) {
 	var self = this;
 	self.system.emit('instance_actions', self.id, {
 
@@ -103,11 +103,27 @@ instance.prototype.actions = function(system) {
 			label: 'Trigger GPI',
 			options: [
 				{
-					 type: 'textinput',
-					 label: 'Number',
-					 id: 'gpi',
-					 default: '1',
-					 regex: self.REGEX_NUMBER
+					type: 'textinput',
+					label: 'Number',
+					id: 'gpi',
+					default: '1',
+					regex: self.REGEX_NUMBER
+				}
+			]
+		},
+		
+		'gpiByName': {
+			label: 'Trigger GPI by Name',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Name',
+					id: 'gpi',
+				},
+				{
+					type: 'textinput',
+					label: 'Parameter',
+					id: 'parameter',
 				}
 			]
 		},
@@ -116,18 +132,18 @@ instance.prototype.actions = function(system) {
 			label: 'Fire custom control',
 			options: [
 				{
-					 type: 'textinput',
-					 label: 'CC Bank',
-					 id: 'bank',
-					 default: '1',
-					 regex: self.REGEX_NUMBER
+					type: 'textinput',
+					label: 'CC Bank',
+					id: 'bank',
+					default: '1',
+					regex: self.REGEX_NUMBER
 				},
 				{
-					 type: 'textinput',
-					 label: 'CC Number',
-					 id: 'cc',
-					 default: '1',
-					 regex: self.REGEX_NUMBER
+					type: 'textinput',
+					label: 'CC Number',
+					id: 'cc',
+					default: '1',
+					regex: self.REGEX_NUMBER
 				}
 			]
 		},
@@ -139,7 +155,7 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					label: 'Set name',
 					id: 'set',
-					default: 'set1',
+					default: 'set1'
 				}
 			]
 		},
@@ -151,7 +167,7 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					label: 'MLE',
 					id: 'mle',
-					default: 'ME:1',
+					default: 'ME:1'
 				}
 			]
 		},
@@ -163,7 +179,7 @@ instance.prototype.actions = function(system) {
 					type: 'textinput',
 					label: 'MLE',
 					id: 'mle',
-					default: 'ME:1',
+					default: 'ME:1'
 				}
 			]
 		},
@@ -189,7 +205,7 @@ instance.prototype.actions = function(system) {
 		},
 
 		'transKey': {
-			label:'Transition Keyer',
+			label: 'Transition Keyer',
 			options: [
 				{
 					type: 'textinput',
@@ -211,9 +227,9 @@ instance.prototype.actions = function(system) {
 					id: 'transD',
 					default: 'TOGGLE',
 					choices: [
-						{ id: 'TOGGLE',  label: 'Toggle Keyer'},
-						{ id: 'ON',  label: 'Transition OnAir'},
-						{ id: 'OFF', label: 'Transition OffAir'}
+						{ id: 'TOGGLE', label: 'Toggle Keyer' },
+						{ id: 'ON', label: 'Transition OnAir' },
+						{ id: 'OFF', label: 'Transition OffAir' }
 					]
 				},
 				{
@@ -222,8 +238,8 @@ instance.prototype.actions = function(system) {
 					id: 'transT',
 					default: 'CUT',
 					choices: [
-						{ id: 'AUTO',  label: 'Auto Transition'},
-						{ id: 'CUT',   label: 'Cut Transition '}
+						{ id: 'AUTO', label: 'Auto Transition' },
+						{ id: 'CUT', label: 'Cut Transition ' }
 					]
 				}
 			]
@@ -240,7 +256,7 @@ instance.prototype.actions = function(system) {
 					id: 'fb',
 					default: 1,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -260,11 +276,11 @@ instance.prototype.actions = function(system) {
 					id: 'layer',
 					default: '',
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
-		'CLRA': { label: 'Clear All Framebuffers'},
+		'CLRA': { label: 'Clear All Framebuffers' },
 
 		'CUE': {
 			label: 'CUE',
@@ -289,11 +305,11 @@ instance.prototype.actions = function(system) {
 					id: 'layer',
 					default: '',
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
-		'DOWN': { label: 'DOWN'},
+		'DOWN': { label: 'DOWN' },
 
 		'FOCUS': {
 			label: 'FOCUS',
@@ -304,7 +320,7 @@ instance.prototype.actions = function(system) {
 					id: 'takeID',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -324,13 +340,13 @@ instance.prototype.actions = function(system) {
 					id: 'layer',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
-		'NEXT': { label: 'NEXT'},
+		'NEXT': { label: 'NEXT' },
 
-		'READ': { label: 'READ'},
+		'READ': { label: 'READ' },
 
 		'RESUME': {
 			label: 'RESUME FRAMEBUFFER',
@@ -341,7 +357,7 @@ instance.prototype.actions = function(system) {
 					id: 'fb',
 					default: 1,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -361,7 +377,7 @@ instance.prototype.actions = function(system) {
 					id: 'layer',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -381,7 +397,7 @@ instance.prototype.actions = function(system) {
 					id: 'Layer',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -394,7 +410,7 @@ instance.prototype.actions = function(system) {
 					id: 'takeID',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -407,7 +423,7 @@ instance.prototype.actions = function(system) {
 					id: 'fb',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
@@ -434,11 +450,11 @@ instance.prototype.actions = function(system) {
 					id: 'layer',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
 		},
 
-		'UP': { label: 'UP'},
+		'UP': { label: 'UP' },
 
 		'UPNEXT': {
 			label: 'UPNEXT',
@@ -449,15 +465,14 @@ instance.prototype.actions = function(system) {
 					id: 'takeID',
 					default: 0,
 					regex: self.REGEX_NUMBER
-				},
+				}
 			]
-		},
-
+		}
 
 	});
-}
+};
 
-instance.prototype.action = function(action) {
+instance.prototype.action = function (action) {
 	var self = this;
 	var id = action.action;
 	var opt = action.options;
@@ -470,6 +485,10 @@ instance.prototype.action = function(action) {
 		case 'gpi':
 			var gpi = parseInt(opt.gpi);
 			cmd = 'GPI ' + (gpi > 9 ? '' : '0') + gpi;
+			break;
+
+		case 'gpiByName':
+			cmd = 'GPI ' + opt.gpi + ':' + opt.parameter;
 			break;
 
 		case 'cc':
@@ -501,22 +520,22 @@ instance.prototype.action = function(action) {
 			break;
 
 		case 'transKey':
-			if ( opt.transD === 'TOGGLE' ) {
-				cmd = 'KEY'+ opt.transT + ' ME:' + opt.mle + ':' + opt.key;
+			if (opt.transD === 'TOGGLE') {
+				cmd = 'KEY' + opt.transT + ' ME:' + opt.mle + ':' + opt.key;
 			} else {
-				cmd = 'KEY'+ opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
+				cmd = 'KEY' + opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
 			}
 			break;
 
 		case 'CLFB':
 			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
-			cmd = 'CLFB '+ frameBuffer + "\r";
+			cmd = 'CLFB ' + frameBuffer + "\r";
 			break;
 
 		case 'CLFB_layer':
 			var frameBuffer = parseInt(opt.fb) - 1; // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
 			var layer = opt.layer;
-			cmd = 'CLFB '+ frameBuffer + ':' + opt.layer + "\r";
+			cmd = 'CLFB ' + frameBuffer + ':' + opt.layer + "\r";
 			break;
 
 		case 'CLRA':
@@ -545,25 +564,25 @@ instance.prototype.action = function(action) {
 			cmd = 'READ\r';
 			break;
 
-		case 'RESUME' :
+		case 'RESUME':
 			var frameBuffer = parseInt(opt.fb) - 1;
-			cmd = 'RESUME '+ frameBuffer + "\r";
+			cmd = 'RESUME ' + frameBuffer + "\r";
 			break;
 
-		case 'RESUME_layer' :
+		case 'RESUME_layer':
 			var frameBuffer = parseInt(opt.fb) - 1;
-			var layer       = opt.layer;
-			cmd = 'RESUME '+ frameBuffer + ':' + layer + "\r";
+			var layer = opt.layer;
+			cmd = 'RESUME ' + frameBuffer + ':' + layer + "\r";
 
 			break;
 
 		case 'SEQI':
 			var takeID = opt.takeID;
-			var layer  = opt.layer;
+			var layer = opt.layer;
 			cmd = 'SEQI ' + takeID + ':' + layer + "\r";
 			break;
 
-		case 'SEQO' :
+		case 'SEQO':
 			var takeID = opt.takeID;
 			cmd = 'SEQO ' + takeID;
 			break;
@@ -573,9 +592,9 @@ instance.prototype.action = function(action) {
 			cmd = 'SWAP ' + frameBuffer + "\r";
 
 		case 'TAKE':
-			var takeID      = opt.takeID;
+			var takeID = opt.takeID;
 			var frameBuffer = parseInt(opt.fb) - 1;
-			var layer       = opt.layer;
+			var layer = opt.layer;
 			cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer + "\r";
 			break;
 
@@ -591,7 +610,7 @@ instance.prototype.action = function(action) {
 
 	if (cmd !== undefined) {
 
-		debug('sending tcp',cmd,"to",self.config.host);
+		debug('sending tcp', cmd, "to", self.config.host);
 
 		if (self.socket !== undefined && self.socket.connected) {
 			self.socket.send(cmd + "\n");
