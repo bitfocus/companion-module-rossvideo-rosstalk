@@ -87,7 +87,7 @@ instance.prototype.config_fields = function () {
 			width: 6,
 			default: "7788",
 			regex: self.REGEX_NUMBER
-		},
+		}
 	]
 };
 
