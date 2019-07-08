@@ -41,7 +41,10 @@ instance.prototype.init_tcp = function () {
 	}
 
 	if (self.config.host) {
-		self.socket = new tcp(self.config.host, 7788);
+		if (self.config.port === undefined) {
+			self.config.port = 7788;
+		}
+		self.socket = new tcp(self.config.host, self.config.port);
 
 		self.socket.on('status_change', function (status, message) {
 			self.status(status, message);
@@ -79,6 +82,14 @@ instance.prototype.config_fields = function () {
 			label: 'Switcher Frame/XPression IP',
 			width: 6,
 			regex: self.REGEX_IP
+		},
+		{
+			type: 'textinput',
+			id: 'port',
+			label: 'Switcher Frame/XPression Port',
+			width: 6,
+			default: "7788",
+			regex: self.REGEX_NUMBER
 		}
 	];
 };
@@ -111,7 +122,7 @@ instance.prototype.actions = function (system) {
 				}
 			]
 		},
-		
+
 		'gpiByName': {
 			label: 'Trigger GPI by Name',
 			options: [
