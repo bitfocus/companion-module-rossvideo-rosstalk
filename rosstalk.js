@@ -565,11 +565,11 @@ instance.prototype.action = function(action) {
 
 		case 'SEQO' :
 			var takeID = opt.takeID;
-			cmd = 'SEQO ' + takeID;
+			cmd = 'SEQO ' + takeID + "\r";
 			break;
 
 		case 'SWAP':
-			var frameBuffer = opt.fb;
+			var frameBuffer = parseInt(opt.fb) - 1;
 			cmd = 'SWAP ' + frameBuffer + "\r";
 
 		case 'TAKE':
