@@ -1,2 +1,2 @@
-companion-module-rosstalk
+# companion-module-rossvideo-rosstalk
 See HELP.md and LICENSE
