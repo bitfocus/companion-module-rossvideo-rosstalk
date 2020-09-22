@@ -355,6 +355,20 @@ instance.prototype.actions = function (system) {
 			]
 		},
 
+		'MEM': {
+			label: 'MEM',
+			options: [
+				{
+					type: 'textinput',
+					label: 'Memory ID',
+					id: 'memID',
+					default: '1:1',
+					regex: self.REGEX_STRING
+				}
+			]
+		},
+
+
 		'NEXT': { label: 'NEXT' },
 
 		'READ': { label: 'READ' },
@@ -560,6 +574,11 @@ instance.prototype.action = function (action) {
 
 		case 'DOWN':
 			cmd = 'DOWN\r';
+			break;
+
+		case 'MEM':
+			var memID = opt.memID;
+			cmd = 'MEM ' + memID + "\r";
 			break;
 
 		case 'FOCUS':
