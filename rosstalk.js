@@ -11,6 +11,30 @@ function instance(system, id, config) {
 
 	self.actions(); // export actions
 
+	self.addUpgradeScript(function (config, actions, releaseActions, feedbacks) {
+		let changed = false;
+
+		for(let actionsItem of actions){
+			if(actionsItem['action'] == 'transKey'){
+				if(actionsItem['options']['mle'] != undefined){
+					actionsItem['options']['mle'] = "ME:"+actionsItem['options']['mle'];
+					changed = true;
+				}
+			}
+		}
+
+		for(let actionsItem of releaseActions){
+			if(actionsItem['action'] == 'transKey'){
+				if(actionsItem['options']['mle'] != undefined){
+					actionsItem['options']['mle'] = "ME:"+actionsItem['options']['mle'];
+					changed = true;
+				}
+			}
+		}
+
+		return changed;
+	});
+
 	return self;
 }
 
@@ -222,8 +246,7 @@ instance.prototype.actions = function (system) {
 					type: 'textinput',
 					label: 'MLE',
 					id: 'mle',
-					default: 1,
-					regex: self.REGEX_NUMBER
+					default: "ME:1"
 				},
 				{
 					type: 'textinput',
@@ -551,9 +574,9 @@ instance.prototype.action = function (action) {
 
 		case 'transKey':
 			if (opt.transD === 'TOGGLE') {
-				cmd = 'KEY' + opt.transT + ' ME:' + opt.mle + ':' + opt.key;
+				cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key;
 			} else {
-				cmd = 'KEY' + opt.transT + opt.transD + ' ME:' + opt.mle + ':' + opt.key;
+				cmd = 'KEY' + opt.transT + opt.transD + ' ' + opt.mle + ':' + opt.key;
 			}
 			break;
 
