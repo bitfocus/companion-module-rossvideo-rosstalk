@@ -671,7 +671,7 @@ instance.prototype.action = function (action) {
 		debug('sending tcp', cmd, "to", self.config.host);
 
 		if (self.socket !== undefined && self.socket.connected) {
-			self.socket.send(cmd + "\n");
+			self.socket.send(cmd + "\r\n");
 		}
 		else {
 			debug('Socket not connected :(');
