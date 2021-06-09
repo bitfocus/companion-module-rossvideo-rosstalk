@@ -11,31 +11,26 @@ function instance(system, id, config) {
 
 	self.actions(); // export actions
 
-	self.addUpgradeScript(function (config, actions, releaseActions, feedbacks) {
-		let changed = false;
-
-		for(let actionsItem of actions){
-			if(actionsItem['action'] == 'transKey'){
-				if(actionsItem['options']['mle'] != undefined){
-					actionsItem['options']['mle'] = "ME:"+actionsItem['options']['mle'];
-					changed = true;
-				}
-			}
-		}
-
-		for(let actionsItem of releaseActions){
-			if(actionsItem['action'] == 'transKey'){
-				if(actionsItem['options']['mle'] != undefined){
-					actionsItem['options']['mle'] = "ME:"+actionsItem['options']['mle'];
-					changed = true;
-				}
-			}
-		}
-
-		return changed;
-	});
-
 	return self;
+}
+
+instance.GetUpgradeScripts = function() {
+	return [
+		function (context, config, actions, feedbacks) {
+			let changed = false;
+	
+			for(let actionsItem of actions){
+				if(actionsItem['action'] == 'transKey'){
+					if(actionsItem['options']['mle'] != undefined){
+						actionsItem['options']['mle'] = "ME:"+actionsItem['options']['mle'];
+						changed = true;
+					}
+				}
+			}
+	
+			return changed;
+		}
+	]
 }
 
 instance.prototype.updateConfig = function (config) {
