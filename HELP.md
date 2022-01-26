@@ -32,3 +32,7 @@ To make sense of the input and output names available in the actions provided by
 * TAKE takeid:buffer:layer
 * UP
 * UPNEXT takeid
+
+**Ultrix**
+
+If you wish to control the Ross Ultrix router then the Companion SWP-08 module is the best method.
