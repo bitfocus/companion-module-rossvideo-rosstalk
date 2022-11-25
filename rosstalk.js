@@ -510,6 +510,30 @@ instance.prototype.actions = function (system) {
 					regex: self.REGEX_NUMBER
 				}
 			]
+		},
+		
+		'TIMER': {
+			label: 'TIMER',
+			options: [
+				{
+					type: 'dropdown',
+					label: 'Action type',
+					id: 'timerAction',
+					default: 'RUN',
+					choices: [
+						{ id: 'RUN', label: 'Run Timer' },
+						{ id: 'PAUSE', label: 'Pause Timer' },
+						{ id: 'STOP', label: 'Stop Timer' }
+					]
+				},
+				{
+					type: 'textinput',
+					label: 'Timer Number',
+					id: 'timerID',
+					default: 0,
+					regex: self.REGEX_NUMBER
+				}
+			]
 		}
 
 	});
@@ -658,6 +682,12 @@ instance.prototype.action = function (action) {
 		case 'UPNEXT':
 			var takeID = opt.takeID;
 			cmd = 'UPNEXT ' + takeID;
+			break;
+			
+		case 'TIMER':
+			var timerAction = opt.timerAction;
+			var timerID = opt.timerID;
+			cmd = 'TIMER ' + timerID + ':' + timerAction;
 			break;
 	}
 
