@@ -35,4 +35,6 @@ To make sense of the input and output names available in the actions provided by
 
 **Ultrix**
 
-If you wish to control the Ross Ultrix router then the Companion SWP-08 module is the best method.
+* START, PAUSE, STOP timer
+
+If you wish to control the Ross Ultrix router crosspoints then the Companion SWP-08 module is the best method.
