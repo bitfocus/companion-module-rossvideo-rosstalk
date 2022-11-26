@@ -513,7 +513,7 @@ instance.prototype.actions = function (system) {
 		},
 		
 		'TIMER': {
-			label: 'TIMER',
+			label: 'ULTRIX TIMER',
 			options: [
 				{
 					type: 'dropdown',
