@@ -686,7 +686,7 @@ instance.prototype.action = function (action) {
 			
 		case 'TIMER':
 			var timerAction = opt.timerAction;
-			var timerID = opt.timerID;
+			var timerID = parseInt(opt.timerID);
 			cmd = 'TIMER ' + timerID + ':' + timerAction;
 			break;
 	}
