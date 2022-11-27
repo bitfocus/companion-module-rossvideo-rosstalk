@@ -513,7 +513,7 @@ instance.prototype.actions = function (system) {
 		},
 		
 		'TIMER': {
-			label: 'ULTRIX TIMER',
+			label: 'Ultrix Timer',
 			options: [
 				{
 					type: 'dropdown',
@@ -523,7 +523,8 @@ instance.prototype.actions = function (system) {
 					choices: [
 						{ id: 'RUN', label: 'Run Timer' },
 						{ id: 'PAUSE', label: 'Pause Timer' },
-						{ id: 'STOP', label: 'Stop Timer' }
+						{ id: 'STOP', label: 'Stop Timer' },
+						{ id: 'END', label: 'End Timer' }
 					]
 				},
 				{
