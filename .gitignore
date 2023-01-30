@@ -1,1 +1,5 @@
 node_modules/
+
+# Companion 3
+/pkg
+/pkg.tgz
