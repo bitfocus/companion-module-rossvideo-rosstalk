@@ -1,13 +1,14 @@
+const { Regex } = require('@companion-module/base')
 module.exports = {
 	actions() {
 		let self = this
 
-		const sendCommand = (action) => {
+		const sendCommand = async (action) => {
 			if (cmd !== undefined) {
 				self.log('debug', 'sending tcp', cmd, 'to', self.config.host)
 
 				if (self.socket !== undefined && self.socket.connected) {
-					self.socket.send(cmd + '\r\n')
+					await self.socket.send(cmd + '\r\n')
 				} else {
 					self.log('debug', 'Socket not connected :(')
 				}
@@ -25,7 +26,7 @@ module.exports = {
 						label: 'Number',
 						id: 'gpi',
 						default: '1',
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -69,14 +70,14 @@ module.exports = {
 						label: 'CC Bank',
 						id: 'bank',
 						default: '1',
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'CC Number',
 						id: 'cc',
 						default: '1',
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -182,7 +183,7 @@ module.exports = {
 						label: 'Keyer',
 						id: 'key',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'dropdown',
@@ -234,7 +235,7 @@ module.exports = {
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -253,14 +254,14 @@ module.exports = {
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'layer (OPTIONAL)',
 						id: 'layer',
 						default: '',
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -298,7 +299,7 @@ module.exports = {
 						label: 'Take ID',
 						id: 'takeID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -317,14 +318,14 @@ module.exports = {
 						label: 'frameBuffer',
 						id: 'fb',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'Layer',
 						id: 'layer',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -380,7 +381,7 @@ module.exports = {
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -399,14 +400,14 @@ module.exports = {
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 1,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'Layer',
 						id: 'layer',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -426,14 +427,14 @@ module.exports = {
 						label: 'take ID',
 						id: 'takeID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'Layer',
 						id: 'Layer',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -453,7 +454,7 @@ module.exports = {
 						label: 'take ID',
 						id: 'takeID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -472,7 +473,7 @@ module.exports = {
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -491,21 +492,21 @@ module.exports = {
 						label: 'Take ID',
 						id: 'takeID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'Framebuffer',
 						id: 'fb',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 					{
 						type: 'textinput',
 						label: 'Layer',
 						id: 'layer',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -535,7 +536,7 @@ module.exports = {
 						label: 'Take ID',
 						id: 'takeID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
@@ -566,7 +567,7 @@ module.exports = {
 						label: 'Timer Number',
 						id: 'timerID',
 						default: 0,
-						regex: self.REGEX_NUMBER,
+						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {

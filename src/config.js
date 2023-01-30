@@ -1,7 +1,6 @@
 const { Regex } = require('@companion-module/base')
 module.exports = {
 	getConfigFields() {
-		var self = this
 		return [
 			{
 				type: 'static-text',
@@ -23,6 +22,7 @@ module.exports = {
 				type: 'dropdown',
 				id: 'model',
 				label: 'Model',
+				width: 12,
 				default: 'carbonite',
 				choices: [
 					{ id: 'carbonite', label: 'Carbonite/Graphite' },
