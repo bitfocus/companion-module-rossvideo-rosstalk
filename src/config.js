@@ -45,6 +45,14 @@ module.exports = {
 				default: '7788',
 				regex: Regex.PORT,
 			},
+			{
+				type: 'checkbox',
+				id: 'keepAlive',
+				label: 'TCP Keep Alive',
+				tooltip: 'TCP Keep Alive: Use a single TCP connection instead of one per command',
+				width: 6,
+				default: false,
+			},
 		]
 	},
 }

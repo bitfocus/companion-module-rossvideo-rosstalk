@@ -9,6 +9,9 @@ module.exports = {
 
 				if (self.socket !== undefined && self.socket.connected) {
 					await self.socket.send(cmd + '\r\n')
+					if (!self.config.keepAlive) {
+						self.socket = self.init_tcp()
+					}
 				} else {
 					self.log('debug', 'Socket not connected :(')
 				}
