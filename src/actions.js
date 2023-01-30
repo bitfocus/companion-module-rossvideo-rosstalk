@@ -67,6 +67,22 @@ module.exports = {
 					sendCommand(cmd)
 				},
 			},
+
+			custom: {
+				name: 'Send a custom command',
+				description: 'Refer to RossTalk Guide',
+				options: [
+					{
+						type: 'textinput',
+						label: 'Command',
+						id: 'cmd',
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					sendCommand(opt.cmd)
+				},
+			},
 		}
 		if (self.config.model == 'carbonite') {
 			actions.cc = {
