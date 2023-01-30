@@ -23,16 +23,16 @@ class RossTalkInstance extends InstanceBase {
 		let self = this
 		self.config = config
 
-		self.actions()
+		self.configUpdated(config)
 
 		self.updateStatus('connecting', 'Waiting To Connect')
-
 		self.init_tcp()
 	}
 
 	async configUpdated(config) {
 		let self = this
 		self.config = config
+		self.actions()
 		self.init_tcp()
 	}
 

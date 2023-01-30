@@ -28,6 +28,7 @@ module.exports = {
 					{ id: 'carbonite', label: 'Carbonite/Graphite' },
 					{ id: 'ultrix', label: 'Ultrix' },
 					{ id: 'acuity', label: 'Acuity/Vision' },
+					{ id: 'opengear', label: 'openGear' },
 				],
 			},
 			{

@@ -3,6 +3,8 @@ module.exports = {
 	actions() {
 		let self = this
 
+		const re_meSource_meNumber = '/^(ME|MME|MSC):[0-9]{1,2}$/'
+
 		const sendCommand = async (action) => {
 			if (cmd !== undefined) {
 				self.log('debug', 'sending tcp', cmd, 'to', self.config.host)
@@ -35,7 +37,8 @@ module.exports = {
 				callback: async (event) => {
 					let opt = event.options
 					var gpi = parseInt(opt.gpi)
-					cmd = 'GPI ' + (gpi > 9 ? '' : '0') + gpi
+					cmd =
+						'GPI ' + (gpi <= 9 && (self.config.model == 'carbonite' || self.config.model == 'acuity') ? '0' : '') + gpi
 					sendCommand(cmd)
 				},
 			},
@@ -64,8 +67,9 @@ module.exports = {
 					sendCommand(cmd)
 				},
 			},
-
-			cc: {
+		}
+		if (self.config.model == 'carbonite') {
+			actions.cc = {
 				name: 'Fire custom control',
 				options: [
 					{
@@ -89,9 +93,8 @@ module.exports = {
 					cmd = 'CC ' + parseInt(opt.bank) + ':' + (cc > 9 ? '' : '0') + cc
 					sendCommand(cmd)
 				},
-			},
-
-			loadset: {
+			}
+			actions.loadset = {
 				name: 'Load Set',
 				options: [
 					{
@@ -106,9 +109,9 @@ module.exports = {
 					cmd = 'LOADSET ' + opt.set
 					sendCommand(cmd)
 				},
-			},
+			}
 
-			cut: {
+			actions.cut = {
 				name: 'Cut',
 				options: [
 					{
@@ -116,6 +119,7 @@ module.exports = {
 						label: 'MLE',
 						id: 'mle',
 						default: 'ME:1',
+						regex: re_meSource_meNumber,
 					},
 				],
 				callback: async (event) => {
@@ -123,9 +127,8 @@ module.exports = {
 					cmd = 'MECUT ' + opt.mle
 					sendCommand(cmd)
 				},
-			},
-
-			autotrans: {
+			}
+			actions.autotrans = {
 				name: 'Auto Transition',
 				options: [
 					{
@@ -133,6 +136,7 @@ module.exports = {
 						label: 'MLE',
 						id: 'mle',
 						default: 'ME:1',
+						regex: re_meSource_meNumber,
 					},
 				],
 				callback: async (event) => {
@@ -140,9 +144,8 @@ module.exports = {
 					cmd = 'MEAUTO ' + opt.mle
 					sendCommand(cmd)
 				},
-			},
-
-			xpt: {
+			}
+			actions.xpt = {
 				name: 'XPT',
 				options: [
 					{
@@ -159,7 +162,7 @@ module.exports = {
 						id: 'vidSource',
 						default: 'IN:20',
 						tooltip:
-							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, XPression Alpha — XP:(channel-number):A [Graphite only], XPression Video — XP:(channel-number):V [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
+							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
 					},
 				],
 				callback: async (event) => {
@@ -170,9 +173,8 @@ module.exports = {
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
 				},
-			},
-
-			transKey: {
+			}
+			actions.transKey = {
 				name: 'Transition Keyer',
 				options: [
 					{
@@ -180,6 +182,7 @@ module.exports = {
 						label: 'MLE',
 						id: 'mle',
 						default: 'ME:1',
+						regex: re_meSource_meNumber,
 					},
 					{
 						type: 'textinput',
@@ -190,7 +193,7 @@ module.exports = {
 					},
 					{
 						type: 'dropdown',
-						label: 'Transition On/Off Air (On & Off options may not be available in all switchers)',
+						label: 'Transition On/Off Air ',
 						id: 'transD',
 						default: 'TOGGLE',
 						choices: [
@@ -219,127 +222,17 @@ module.exports = {
 					}
 					sendCommand(cmd)
 				},
-			},
-
-			ftb: {
+			}
+			actions.ftb = {
 				label: 'Fade to black',
 				options: [],
 				callback: async (event) => {
 					cmd = 'FTB'
 					sendCommand(cmd)
 				},
-			},
+			}
 
-			CLFB: {
-				name: 'Clear Framebuffer',
-				options: [
-					{
-						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 1,
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var frameBuffer = parseInt(opt.fb) - 1 // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
-					cmd = 'CLFB ' + frameBuffer
-					sendCommand(cmd)
-				},
-			},
-
-			CLFB_layer: {
-				name: 'Clear Layer',
-				options: [
-					{
-						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 1,
-						regex: Regex.NUMBER,
-					},
-					{
-						type: 'textinput',
-						label: 'layer (OPTIONAL)',
-						id: 'layer',
-						default: '',
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var frameBuffer = parseInt(opt.fb) - 1 // Framebuffer is 0 index so framebuffer 1 is actually 0 in rosstalk
-					var layer = opt.layer
-					cmd = 'CLFB ' + frameBuffer + ':' + opt.layer
-					sendCommand(cmd)
-				},
-			},
-
-			CLRA: {
-				label: 'Clear All Framebuffers',
-				options: [],
-				callback: async (event) => {
-					cmd = 'CLRA'
-					sendCommand(cmd)
-				},
-			},
-
-			DOWN: {
-				label: 'DOWN',
-				options: [],
-				callback: async (event) => {
-					cmd = 'DOWN'
-					sendCommand(cmd)
-				},
-			},
-
-			FOCUS: {
-				name: 'FOCUS',
-				options: [
-					{
-						type: 'textinput',
-						label: 'Take ID',
-						id: 'takeID',
-						default: 0,
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var takeID = opt.takeID
-					cmd = 'FOCUS ' + takeID
-					sendCommand(cmd)
-				},
-			},
-
-			LAYEROFF: {
-				name: 'LAYEROFF',
-				options: [
-					{
-						type: 'textinput',
-						label: 'frameBuffer',
-						id: 'fb',
-						default: 1,
-						regex: Regex.NUMBER,
-					},
-					{
-						type: 'textinput',
-						label: 'Layer',
-						id: 'layer',
-						default: 0,
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var layer = opt.layer
-					cmd = 'LAYEROFF ' + layer
-					sendCommand(cmd)
-				},
-			},
-
-			MEM: {
+			actions.MEM = {
 				name: 'MEM',
 				options: [
 					{
@@ -347,7 +240,7 @@ module.exports = {
 						label: 'Memory ID',
 						id: 'memID',
 						default: '1:1',
-						regex: self.REGEX_STRING,
+						regex: '/^[0-9]{1,2}(:(ME|MME|MSC):[0-9]{1,2})+$/',
 					},
 				],
 				callback: async (event) => {
@@ -356,73 +249,8 @@ module.exports = {
 					cmd = 'MEM ' + memID
 					sendCommand(cmd)
 				},
-			},
-
-			NEXT: {
-				label: 'NEXT',
-				options: [],
-				callback: async (event) => {
-					cmd = 'NEXT'
-					sendCommand(cmd)
-				},
-			},
-
-			READ: {
-				label: 'READ',
-				options: [],
-				callback: async (event) => {
-					cmd = 'READ'
-					sendCommand(cmd)
-				},
-			},
-
-			RESUME: {
-				name: 'RESUME FRAMEBUFFER',
-				options: [
-					{
-						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 1,
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var frameBuffer = parseInt(opt.fb) - 1
-					cmd = 'RESUME ' + frameBuffer
-					sendCommand(cmd)
-				},
-			},
-
-			RESUME_layer: {
-				name: 'RESUME LAYER',
-				options: [
-					{
-						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 1,
-						regex: Regex.NUMBER,
-					},
-					{
-						type: 'textinput',
-						label: 'Layer',
-						id: 'layer',
-						default: 0,
-						regex: Regex.NUMBER,
-					},
-				],
-				callback: async (event) => {
-					let opt = event.options
-					var frameBuffer = parseInt(opt.fb) - 1
-					var layer = opt.layer
-					cmd = 'RESUME ' + frameBuffer + ':' + layer
-					sendCommand(cmd)
-				},
-			},
-
-			SEQI: {
+			}
+			actions.SEQI = {
 				name: 'SEQI',
 				options: [
 					{
@@ -447,9 +275,8 @@ module.exports = {
 					cmd = 'SEQI ' + takeID + ':' + layer
 					sendCommand(cmd)
 				},
-			},
-
-			SEQO: {
+			}
+			actions.SEQO = {
 				name: 'SEQO',
 				options: [
 					{
@@ -466,91 +293,189 @@ module.exports = {
 					cmd = 'SEQO ' + takeID
 					sendCommand(cmd)
 				},
-			},
-
-			SWAP: {
-				name: 'SWAP',
+			}
+		}
+		if (self.config.model == 'acuity') {
+			actions.cc = {
+				name: 'Fire custom control',
 				options: [
 					{
 						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 0,
+						label: 'CC Bank',
+						id: 'bank',
+						default: '1',
+						regex: Regex.NUMBER,
+					},
+					{
+						type: 'textinput',
+						label: 'CC Number',
+						id: 'cc',
+						default: '1',
 						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var frameBuffer = parseInt(opt.fb) - 1
-					cmd = 'SWAP ' + frameBuffer
+					var cc = parseInt(opt.cc)
+					cmd = 'CC ' + parseInt(opt.bank) + ':' + (cc > 9 ? '' : '0') + cc
 					sendCommand(cmd)
 				},
-			},
-
-			TAKE: {
-				name: 'TAKE',
+			}
+			actions.transKey = {
+				name: 'Transition Keyer',
 				options: [
 					{
 						type: 'textinput',
-						label: 'Take ID',
-						id: 'takeID',
-						default: 0,
-						regex: Regex.NUMBER,
+						label: 'MLE',
+						id: 'mle',
+						default: 'ME:1',
+						regex: re_meSource_meNumber,
 					},
 					{
 						type: 'textinput',
-						label: 'Framebuffer',
-						id: 'fb',
-						default: 0,
+						label: 'Keyer',
+						id: 'key',
+						default: 1,
 						regex: Regex.NUMBER,
 					},
 					{
-						type: 'textinput',
-						label: 'Layer',
-						id: 'layer',
-						default: 0,
-						regex: Regex.NUMBER,
+						type: 'dropdown',
+						label: 'Transition type',
+						id: 'transT',
+						default: 'CUT',
+						choices: [
+							{ id: 'AUTO', label: 'Auto Transition' },
+							{ id: 'CUT', label: 'Cut Transition ' },
+						],
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var takeID = opt.takeID
-					var frameBuffer = parseInt(opt.fb) - 1
-					var layer = opt.layer
-					cmd = 'TAKE ' + takeID + ':' + frameBuffer + ':' + layer
+					cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key
 					sendCommand(cmd)
 				},
-			},
+			}
+			actions.loadset = {
+				name: 'Load Set',
+				options: [
+					{
+						type: 'dropdown',
+						label: 'Load Location',
+						id: 'location',
+						default: 'USB',
+						choices: [
+							{ id: 'USB', label: 'USB' },
+							{ id: 'HD', label: 'HD' },
+						],
+					},
+					{
+						type: 'textinput',
+						label: 'Set name',
+						id: 'set',
+						default: 'set1',
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					cmd = 'LOADSET ' + opt.location + ':' + opt.set
+					sendCommand(cmd)
+				},
+			}
 
-			UP: {
-				label: 'UP',
+			actions.cut = {
+				name: 'Cut',
+				options: [
+					{
+						type: 'textinput',
+						label: 'MLE',
+						id: 'mle',
+						default: '1',
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					cmd = 'MECUT ' + opt.mle
+					sendCommand(cmd)
+				},
+			}
+			actions.ftb = {
+				label: 'Fade to black',
 				options: [],
 				callback: async (event) => {
-					cmd = 'UP'
+					cmd = 'FTB'
 					sendCommand(cmd)
 				},
-			},
+			}
 
-			UPNEXT: {
-				name: 'UPNEXT',
+			actions.MEM = {
+				name: 'MEM',
 				options: [
 					{
 						type: 'textinput',
-						label: 'Take ID',
-						id: 'takeID',
-						default: 0,
+						label: 'Memory ID',
+						id: 'memID',
+						default: '1:1',
+						regex: '/^[0-9]{1,2}|?(:[0-9]{1,2})+$/',
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					var memID = opt.memID
+					cmd = 'MEM ' + memID
+					sendCommand(cmd)
+				},
+			}
+
+			actions.autotrans = {
+				name: 'Auto Transition',
+				options: [
+					{
+						type: 'textinput',
+						label: 'MLE',
+						id: 'mle',
+						default: '1',
 						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var takeID = opt.takeID
-					cmd = 'UPNEXT ' + takeID
+					cmd = 'MEAUTO ' + opt.mle
 					sendCommand(cmd)
 				},
-			},
+			}
 
-			TIMER: {
+			actions.xpt = {
+				name: 'XPT',
+				options: [
+					{
+						type: 'textinput',
+						label: 'Destination',
+						id: 'vidDest',
+						default: 'ME:1:PGM',
+						tooltip:
+							'Program - ME:(ME-number):PGM, AuxBus — AUX:(aux-number), Key — ME:(ME-number):KEY:(key-number), MiniME™ — MME:(ME-number), Preset — ME:(ME-number):PST',
+					},
+					{
+						type: 'textinput',
+						label: 'Source',
+						id: 'vidSource',
+						default: 'IN:20',
+						tooltip:
+							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					var src = opt.vidSource
+					var dst = opt.vidDest
+					cmd = 'XPT ' + dst + ':' + src
+					console.log('ross xpt:', cmd)
+					sendCommand(cmd)
+				},
+			}
+		}
+		if (self.config.model == 'ultrix') {
+			actions.TIMER = {
 				name: 'Ultrix Timer',
 				options: [
 					{
@@ -580,7 +505,53 @@ module.exports = {
 					cmd = 'TIMER ' + timerID + ':' + timerAction
 					sendCommand(cmd)
 				},
-			},
+			}
+		}
+		if (self.config.model == 'opengear') {
+			actions.ftb = {
+				label: 'Fade to black',
+				description: 'Not supported on the MDK-111A-K.',
+				options: [],
+				callback: async (event) => {
+					cmd = 'FTB'
+					sendCommand(cmd)
+				},
+			}
+
+			actions.transKey = {
+				name: 'Transition Keyer',
+				options: [
+					{
+						type: 'textinput',
+						label: 'MLE',
+						id: 'mle',
+						default: 'ME:1',
+						regex: re_meSource_meNumber,
+					},
+					{
+						type: 'textinput',
+						label: 'Keyer',
+						id: 'key',
+						default: 1,
+						regex: Regex.NUMBER,
+					},
+					{
+						type: 'dropdown',
+						label: 'Transition type',
+						id: 'transT',
+						default: 'CUT',
+						choices: [
+							{ id: 'AUTO', label: 'Auto Transition' },
+							{ id: 'CUT', label: 'Cut Transition ' },
+						],
+					},
+				],
+				callback: async (event) => {
+					let opt = event.options
+					cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key
+					sendCommand(cmd)
+				},
+			}
 		}
 
 		this.setActionDefinitions(actions)
