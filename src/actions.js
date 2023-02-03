@@ -22,6 +22,13 @@ module.exports = {
 			self.log('debug', 'action():', action)
 		}
 
+		const parseVariable = async (input) => {
+			if (typeof input === 'string' && input.includes('$(')) {
+				return await self.parseVariablesInString(input)
+			}
+			return input
+		}
+
 		let actions = {
 			gpi: {
 				name: 'Trigger GPI',
@@ -50,6 +57,7 @@ module.exports = {
 						type: 'textinput',
 						label: 'Name',
 						id: 'gpi',
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -59,12 +67,16 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					if (opt.parameter === null) {
-						cmd = 'GPI ' + opt.gpi
-					} else {
-						cmd = 'GPI ' + opt.gpi + ':' + opt.parameter
+
+					if (opt.gpi) {
+						let gpi = parseVariable(opt.gpi)
+						if (opt.parameter === null) {
+							cmd = 'GPI ' + gpi
+						} else {
+							cmd = 'GPI ' + gpi + ':' + opt.parameter
+						}
+						sendCommand(cmd)
 					}
-					sendCommand(cmd)
 				},
 			},
 
@@ -117,12 +129,14 @@ module.exports = {
 						type: 'textinput',
 						label: 'Set name',
 						id: 'set',
+						useVariables: true,
 						default: 'set1',
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'LOADSET ' + opt.set
+					let set = parseVariable(opt.set)
+					cmd = 'LOADSET ' + set
 					sendCommand(cmd)
 				},
 			}
@@ -134,13 +148,15 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: 'ME:1',
 						regex: re_meSource_meNumber,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'MECUT ' + opt.mle
+					let mle = parseVariable(opt.mle)
+					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
 			}
@@ -151,13 +167,15 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: 'ME:1',
 						regex: re_meSource_meNumber,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'MEAUTO ' + opt.mle
+					let mle = parseVariable(opt.mle)
+					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
 			}
@@ -171,6 +189,7 @@ module.exports = {
 						default: 'ME:1:PGM',
 						tooltip:
 							'Program - ME:(ME-number):PGM, AuxBus — AUX:(aux-number), Key — ME:(ME-number):KEY:(key-number), MiniME™ — MME:(ME-number), Preset — ME:(ME-number):PST',
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -179,12 +198,13 @@ module.exports = {
 						default: 'IN:20',
 						tooltip:
 							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
+						useVariables: true,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var src = opt.vidSource
-					var dst = opt.vidDest
+					var src = parseVariable(opt.vidSource)
+					var dst = parseVariable(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -197,6 +217,7 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: 'ME:1',
 						regex: re_meSource_meNumber,
 					},
@@ -231,10 +252,11 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
+					let mle = parseVariable(opt.mle)
 					if (opt.transD === 'TOGGLE') {
-						cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key
+						cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					} else {
-						cmd = 'KEY' + opt.transT + opt.transD + ' ' + opt.mle + ':' + opt.key
+						cmd = 'KEY' + opt.transT + opt.transD + ' ' + mle + ':' + opt.key
 					}
 					sendCommand(cmd)
 				},
@@ -345,6 +367,7 @@ module.exports = {
 						label: 'MLE',
 						id: 'mle',
 						default: 'ME:1',
+						useVariables: true,
 						regex: re_meSource_meNumber,
 					},
 					{
@@ -367,7 +390,8 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key
+					let mle = parseVariable(opt.mle)
+					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					sendCommand(cmd)
 				},
 			}
@@ -387,13 +411,15 @@ module.exports = {
 					{
 						type: 'textinput',
 						label: 'Set name',
+						useVariables: true,
 						id: 'set',
 						default: 'set1',
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'LOADSET ' + opt.location + ':' + opt.set
+					let set = parseVariable(opt.set)
+					cmd = 'LOADSET ' + opt.location + ':' + set
 					sendCommand(cmd)
 				},
 			}
@@ -405,12 +431,14 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: '1',
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'MECUT ' + opt.mle
+					let mle = parseVariable(opt.mle)
+					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
 			}
@@ -449,13 +477,15 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: '1',
 						regex: Regex.NUMBER,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'MEAUTO ' + opt.mle
+					let mle = parseVariable(opt.mle)
+					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
 			}
@@ -470,6 +500,7 @@ module.exports = {
 						default: 'ME:1:PGM',
 						tooltip:
 							'Program - ME:(ME-number):PGM, AuxBus — AUX:(aux-number), Key — ME:(ME-number):KEY:(key-number), MiniME™ — MME:(ME-number), Preset — ME:(ME-number):PST',
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -478,12 +509,13 @@ module.exports = {
 						default: 'IN:20',
 						tooltip:
 							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
+						useVariables: true,
 					},
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var src = opt.vidSource
-					var dst = opt.vidDest
+					var src = parseVariable(opt.vidSource)
+					var dst = parseVariable(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -541,6 +573,7 @@ module.exports = {
 						type: 'textinput',
 						label: 'MLE',
 						id: 'mle',
+						useVariables: true,
 						default: 'ME:1',
 						regex: re_meSource_meNumber,
 					},
@@ -564,7 +597,8 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					cmd = 'KEY' + opt.transT + ' ' + opt.mle + ':' + opt.key
+					let mle = parseVariable(opt.mle)
+					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					sendCommand(cmd)
 				},
 			}

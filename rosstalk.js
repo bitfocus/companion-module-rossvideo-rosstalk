@@ -23,10 +23,8 @@ class RossTalkInstance extends InstanceBase {
 		let self = this
 		self.config = config
 
-		self.configUpdated(config)
-
 		self.updateStatus('connecting', 'Waiting To Connect')
-		self.init_tcp()
+		self.configUpdated(config)
 	}
 
 	async configUpdated(config) {
@@ -51,12 +49,14 @@ class RossTalkInstance extends InstanceBase {
 			self.socket = new TCPHelper(self.config.host, self.config.port)
 
 			self.socket.on('status_change', function (status, message) {
-				self.updateStatus(status, message)
+				if (status !== 'unknown_error') {
+					self.updateStatus(status, message)
+				}
 			})
 
 			self.socket.on('error', function (err) {
-				self.log('debug', 'Network error', err)
-				self.updateStatus('error', err)
+				self.log('debug', 'Network error', JSON.stringify(err))
+				self.updateStatus('error', err.code)
 				self.log('error', 'Network error: ' + err.message)
 			})
 
