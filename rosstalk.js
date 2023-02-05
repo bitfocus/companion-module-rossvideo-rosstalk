@@ -24,7 +24,7 @@ class RossTalkInstance extends InstanceBase {
 		self.config = config
 
 		self.updateStatus('connecting', 'Waiting To Connect')
-		self.configUpdated(config)
+		await self.configUpdated(config)
 	}
 
 	async configUpdated(config) {
