@@ -1,0 +1,34 @@
+{
+	"id": "rossvideo-rosstalk",
+	"name": "rossvideo-rosstalk",
+	"shortname": "rosstalk",
+	"description": "rosstalk plugin for Companion",
+	"version": "0.0.0",
+	"license": "MIT",
+	"repository": "git+https://github.com/bitfocus/companion-module-rossvideo-rosstalk.git",
+	"bugs": "https://github.com/bitfocus/companion-module-rossvideo-rosstalk/issues",
+	"maintainers": [
+		{
+			"name": "William Viker",
+			"email": "william@bitfocus.io"
+		}
+	],
+	"legacyIds": [
+		"rosstalk"
+	],
+	"runtime": {
+		"type": "node18",
+		"api": "nodejs-ipc",
+		"apiVersion": "0.0.0",
+		"entrypoint": "../rosstalk.js"
+	},
+	"manufacturer": "Ross Video",
+	"products": [
+		"Rosstalk"
+	],
+	"keywords": [
+		"Protocol",
+		"Vision Mixer",
+		"Software"
+	]
+}
