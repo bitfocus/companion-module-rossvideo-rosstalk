@@ -5,21 +5,18 @@ module.exports = {
 
 		const re_meSource_meNumber = '/^(ME|MME|MSC):[0-9]{1,2}$/'
 
-		const sendCommand = async (action) => {
+		const sendCommand = (cmd) => {
 			if (cmd !== undefined) {
-				self.log('debug', 'sending tcp', cmd, 'to', self.config.host)
-
-				if (self.socket !== undefined && self.socket.connected) {
-					await self.socket.send(cmd + '\r\n')
-					if (!self.config.keepAlive) {
-						self.socket = self.init_tcp()
-					}
+				if (!self.config.keepAlive) {
+					self.init_tcp(cmd);
+				}
+				else if (self.socket !== undefined && self.socket.isConnected) {
+					self.log('debug', `sending tcp ${cmd} to ${self.config.host}`)
+					self.socket.send(cmd + '\r\n')
 				} else {
 					self.log('debug', 'Socket not connected :(')
 				}
 			}
-
-			self.log('debug', 'action():', action)
 		}
 
 		const parseVariable = async (input) => {
@@ -69,7 +66,7 @@ module.exports = {
 					let opt = event.options
 
 					if (opt.gpi) {
-						let gpi = parseVariable(opt.gpi)
+						let gpi = await parseVariable(opt.gpi)
 						if (opt.parameter === null) {
 							cmd = 'GPI ' + gpi
 						} else {
@@ -135,7 +132,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let set = parseVariable(opt.set)
+					let set = await parseVariable(opt.set)
 					cmd = 'LOADSET ' + set
 					sendCommand(cmd)
 				},
@@ -155,7 +152,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
@@ -174,7 +171,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
@@ -203,8 +200,8 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var src = parseVariable(opt.vidSource)
-					var dst = parseVariable(opt.vidDest)
+					var src = await parseVariable(opt.vidSource)
+					var dst = await parseVariable(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -252,7 +249,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					if (opt.transD === 'TOGGLE') {
 						cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					} else {
@@ -390,7 +387,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					sendCommand(cmd)
 				},
@@ -418,7 +415,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let set = parseVariable(opt.set)
+					let set = await parseVariable(opt.set)
 					cmd = 'LOADSET ' + opt.location + ':' + set
 					sendCommand(cmd)
 				},
@@ -437,7 +434,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
@@ -484,7 +481,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
@@ -514,8 +511,8 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					var src = parseVariable(opt.vidSource)
-					var dst = parseVariable(opt.vidDest)
+					var src = await parseVariable(opt.vidSource)
+					var dst = await parseVariable(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -597,7 +594,7 @@ module.exports = {
 				],
 				callback: async (event) => {
 					let opt = event.options
-					let mle = parseVariable(opt.mle)
+					let mle = await parseVariable(opt.mle)
 					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
 					sendCommand(cmd)
 				},

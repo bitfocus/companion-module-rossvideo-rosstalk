@@ -1,4 +1,4 @@
-const { TCPHelper, InstanceBase, runEntrypoint } = require('@companion-module/base')
+const { TCPHelper, InstanceBase, InstanceStatus, runEntrypoint } = require('@companion-module/base')
 
 const config = require('./src/config')
 const actions = require('./src/actions')
@@ -31,16 +31,24 @@ class RossTalkInstance extends InstanceBase {
 		let self = this
 		self.config = config
 		self.actions()
-		self.init_tcp()
+
+		if (self.config.keepAlive) {
+			self.init_tcp();
+		}
+		else {
+			self.updateStatus(InstanceStatus.Ok);
+		}
 	}
 
-	init_tcp() {
+	init_tcp(cmd) {
 		var self = this
 
 		if (self.socket !== undefined) {
 			self.socket.destroy()
 			delete self.socket
 		}
+
+		self.log('debug', 'Opening socket.');
 
 		if (self.config.host) {
 			if (self.config.port === undefined) {
@@ -61,8 +69,18 @@ class RossTalkInstance extends InstanceBase {
 			})
 
 			self.socket.on('connect', function () {
-				self.updateStatus('ok')
+				self.updateStatus(InstanceStatus.Ok)
 				self.log('debug', 'Connected')
+				if (cmd !== undefined) {
+					self.log('debug', `sending tcp ${cmd} to ${self.config.host}`);
+					self.socket.send(cmd + '\r\n');
+
+					if (!self.config.keepAlive) {
+						self.log('debug', 'Closing socket.');
+						self.socket.destroy()
+						delete self.socket
+					}
+				}
 			})
 
 			self.socket.on('data', function (data) {})
