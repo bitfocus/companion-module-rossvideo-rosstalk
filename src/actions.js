@@ -329,6 +329,43 @@ module.exports = {
 					sendCommand(cmd)
 				},
 			}
+			actions.MVBOX = {
+				name: "Change multiviewer box",
+				options: [
+					{
+						type: 'textinput',
+						label: 'Multiviewer Number',
+						id: 'mvID',
+						default: 1,
+						regex: Regex.NUMBER,
+					},
+					{
+						type: 'textinput',
+						label: 'Box Number',
+						id: 'boxID',
+						default: 1,
+						regex: Regex.NUMBER,
+					},
+					{
+						type: 'textinput',
+						label: 'Source',
+						id: 'vidSource',
+						default: 'IN:5',
+						tooltip:
+							'Aux Bus — AUX:(aux-number), Black — BK, Clean — ME:(ME-number):CLN, Input Source — IN:(input-number), Key — ME:(ME-number):KEY:(key-number), Matte Color — BG, Media-Store — MS:(channel-number), MiniME™ — MME:(ME-number), Preview — ME:(ME-number):PV, Program — ME:(ME-number):PGM, [Graphite only], Chroma Key Video — CK:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only], Chroma Key Alpha — CKA:(chroma key number) [UltraChromeHR, or Carbonite Black v14.0 or higher only]',
+						useVariables: true
+					}
+				],
+				callback: async (event) => {
+					let opt = event.options
+					let mvID = parseInt(opt.mvID)
+					let boxID = parseInt(opt.boxID)
+					var src = await parseVariable(opt.vidSource)
+
+					cmd = 'MVBOX:' + mvID + ":" + boxID + ":" + src
+					sendCommand(cmd)
+				}
+			}
 		}
 		if (self.config.model == 'acuity') {
 			actions.cc = {
