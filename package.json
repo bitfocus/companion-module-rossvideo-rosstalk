@@ -14,6 +14,6 @@
 		"@companion-module/base": "^1.5.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^0.5.2"
+		"@companion-module/tools": "^2.3.0"
 	}
 }
