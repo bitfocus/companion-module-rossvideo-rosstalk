@@ -1,6 +1,6 @@
 {
 	"name": "rossvideo-rosstalk",
-	"version": "2.0.1",
+	"version": "2.1.0",
 	"main": "rosstalk.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"
@@ -11,9 +11,9 @@
 		"url": "git+https://github.com/bitfocus/companion-module-rossvideo-rosstalk.git"
 	},
 	"dependencies": {
-		"@companion-module/base": "~1.1.0"
+		"@companion-module/base": "^1.5.0"
 	},
 	"devDependencies": {
-		"@companion-module/tools": "^0.5.2"
+		"@companion-module/tools": "^2.3.0"
 	}
 }

@@ -19,12 +19,6 @@ module.exports = {
 			}
 		}
 
-		const parseVariable = async (input) => {
-			if (typeof input === 'string' && input.includes('$(')) {
-				return await self.parseVariablesInString(input)
-			}
-			return input
-		}
 
 		let actions = {
 			gpi: {
@@ -36,11 +30,13 @@ module.exports = {
 						id: 'gpi',
 						default: '1',
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var gpi = parseInt(opt.gpi)
+					let gpiText = await context.parseVariablesInString(opt.gpi)
+					var gpi = parseInt(gpiText)
 					cmd =
 						'GPI ' + (gpi <= 9 && (self.config.model == 'carbonite' || self.config.model == 'acuity') ? '0' : '') + gpi
 					sendCommand(cmd)
@@ -60,17 +56,19 @@ module.exports = {
 						type: 'textinput',
 						label: 'Parameter',
 						id: 'parameter',
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
 
 					if (opt.gpi) {
-						let gpi = await parseVariable(opt.gpi)
-						if (opt.parameter === null) {
+						let gpi = await context.parseVariablesInString(opt.gpi)
+						let parameter = await context.parseVariablesInString(opt.parameter)
+						if (parameter === null) {
 							cmd = 'GPI ' + gpi
 						} else {
-							cmd = 'GPI ' + gpi + ':' + opt.parameter
+							cmd = 'GPI ' + gpi + ':' + parameter
 						}
 						sendCommand(cmd)
 					}
@@ -85,11 +83,13 @@ module.exports = {
 						type: 'textinput',
 						label: 'Command',
 						id: 'cmd',
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					sendCommand(opt.cmd)
+					let cmd = await context.parseVariablesInString(opt.cmd)
+					sendCommand(cmd)
 				},
 			},
 		}
@@ -103,6 +103,7 @@ module.exports = {
 						id: 'bank',
 						default: '1',
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -110,12 +111,15 @@ module.exports = {
 						id: 'cc',
 						default: '1',
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var cc = parseInt(opt.cc)
-					cmd = 'CC ' + parseInt(opt.bank) + ':' + (cc > 9 ? '' : '0') + cc
+					let bankText = await context.parseVariablesInString(opt.bank)
+					let ccText = await context.parseVariablesInString(opt.cc)
+					var cc = parseInt(ccText)
+					cmd = 'CC ' + parseInt(bankText) + ':' + (cc > 9 ? '' : '0') + cc
 					sendCommand(cmd)
 				},
 			}
@@ -130,9 +134,9 @@ module.exports = {
 						default: 'set1',
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let set = await parseVariable(opt.set)
+					let set = await context.parseVariablesInString(opt.set)
 					cmd = 'LOADSET ' + set
 					sendCommand(cmd)
 				},
@@ -150,9 +154,9 @@ module.exports = {
 						regex: re_meSource_meNumber,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
+					let mle = await context.parseVariablesInString(opt.mle)
 					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
@@ -169,9 +173,9 @@ module.exports = {
 						regex: re_meSource_meNumber,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
+					let mle = await context.parseVariablesInString(opt.mle)
 					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
@@ -198,10 +202,10 @@ module.exports = {
 						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var src = await parseVariable(opt.vidSource)
-					var dst = await parseVariable(opt.vidDest)
+					var src = await context.parseVariablesInString(opt.vidSource)
+					var dst = await context.parseVariablesInString(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -224,6 +228,7 @@ module.exports = {
 						id: 'key',
 						default: 1,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'dropdown',
@@ -247,13 +252,14 @@ module.exports = {
 						],
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
+					let mle = await context.parseVariablesInString(opt.mle)
+					let keyText = await context.parseVariablesInString(opt.key)
 					if (opt.transD === 'TOGGLE') {
-						cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
+						cmd = 'KEY' + opt.transT + ' ' + mle + ':' + keyText
 					} else {
-						cmd = 'KEY' + opt.transT + opt.transD + ' ' + mle + ':' + opt.key
+						cmd = 'KEY' + opt.transT + opt.transD + ' ' + mle + ':' + keyText
 					}
 					sendCommand(cmd)
 				},
@@ -261,7 +267,7 @@ module.exports = {
 			actions.ftb = {
 				label: 'Fade to black',
 				options: [],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					cmd = 'FTB'
 					sendCommand(cmd)
 				},
@@ -276,11 +282,12 @@ module.exports = {
 						id: 'memID',
 						default: '1:1',
 						regex: '/^[0-9]{1,2}(:(ME|MME|MSC):[0-9]{1,2})+$/',
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var memID = opt.memID
+					var memID = await context.parseVariablesInString(opt.memID)
 					cmd = 'MEM ' + memID
 					sendCommand(cmd)
 				},
@@ -294,6 +301,7 @@ module.exports = {
 						id: 'takeID',
 						default: 0,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -301,12 +309,13 @@ module.exports = {
 						id: 'Layer',
 						default: 0,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var takeID = opt.takeID
-					var layer = opt.layer
+					var takeID = await context.parseVariablesInString(opt.takeID)
+					var layer = await context.parseVariablesInString(opt.Layer)
 					cmd = 'SEQI ' + takeID + ':' + layer
 					sendCommand(cmd)
 				},
@@ -320,11 +329,12 @@ module.exports = {
 						id: 'takeID',
 						default: 0,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var takeID = opt.takeID
+					var takeID = await context.parseVariablesInString(opt.takeID)
 					cmd = 'SEQO ' + takeID
 					sendCommand(cmd)
 				},
@@ -356,11 +366,11 @@ module.exports = {
 						useVariables: true
 					}
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
 					let mvID = parseInt(opt.mvID)
 					let boxID = parseInt(opt.boxID)
-					var src = await parseVariable(opt.vidSource)
+					var src = await context.parseVariablesInString(opt.vidSource)
 
 					cmd = 'MVBOX:' + mvID + ":" + boxID + ":" + src
 					sendCommand(cmd)
@@ -377,6 +387,7 @@ module.exports = {
 						id: 'bank',
 						default: '1',
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'textinput',
@@ -384,12 +395,15 @@ module.exports = {
 						id: 'cc',
 						default: '1',
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var cc = parseInt(opt.cc)
-					cmd = 'CC ' + parseInt(opt.bank) + ':' + (cc > 9 ? '' : '0') + cc
+					let bankText = await context.parseVariablesInString(opt.bank)
+					let ccText = await context.parseVariablesInString(opt.cc)
+					var cc = parseInt(ccText)
+					cmd = 'CC ' + parseInt(bankText) + ':' + (cc > 9 ? '' : '0') + cc
 					sendCommand(cmd)
 				},
 			}
@@ -410,6 +424,7 @@ module.exports = {
 						id: 'key',
 						default: 1,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'dropdown',
@@ -422,10 +437,11 @@ module.exports = {
 						],
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
-					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
+					let mle = await context.parseVariablesInString(opt.mle)
+					let keyText = await context.parseVariablesInString(opt.key)
+					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + keyText
 					sendCommand(cmd)
 				},
 			}
@@ -450,10 +466,11 @@ module.exports = {
 						default: 'set1',
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let set = await parseVariable(opt.set)
-					cmd = 'LOADSET ' + opt.location + ':' + set
+					let set = await context.parseVariablesInString(opt.set)
+					let location = await context.parseVariablesInString(opt.location)
+					cmd = 'LOADSET ' + location + ':' + set
 					sendCommand(cmd)
 				},
 			}
@@ -469,9 +486,9 @@ module.exports = {
 						default: '1',
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
+					let mle = await context.parseVariablesInString(opt.mle)
 					cmd = 'MECUT ' + mle
 					sendCommand(cmd)
 				},
@@ -479,7 +496,7 @@ module.exports = {
 			actions.ftb = {
 				label: 'Fade to black',
 				options: [],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					cmd = 'FTB'
 					sendCommand(cmd)
 				},
@@ -494,11 +511,12 @@ module.exports = {
 						id: 'memID',
 						default: '1:1',
 						regex: '/^[0-9]{1,2}|?(:[0-9]{1,2})+$/',
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var memID = opt.memID
+					var memID = await context.parseVariablesInString(opt.memID)
 					cmd = 'MEM ' + memID
 					sendCommand(cmd)
 				},
@@ -516,9 +534,9 @@ module.exports = {
 						regex: Regex.NUMBER,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
+					let mle = await context.parseVariablesInString(opt.mle)
 					cmd = 'MEAUTO ' + mle
 					sendCommand(cmd)
 				},
@@ -546,10 +564,10 @@ module.exports = {
 						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					var src = await parseVariable(opt.vidSource)
-					var dst = await parseVariable(opt.vidDest)
+					var src = await context.parseVariablesInString(opt.vidSource)
+					var dst = await context.parseVariablesInString(opt.vidDest)
 					cmd = 'XPT ' + dst + ':' + src
 					console.log('ross xpt:', cmd)
 					sendCommand(cmd)
@@ -578,12 +596,14 @@ module.exports = {
 						id: 'timerID',
 						default: 0,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
 					var timerAction = opt.timerAction
-					var timerID = parseInt(opt.timerID)
+					var timerIDText = await context.parseVariablesInString(opt.timerID)
+					var timerID = parseInt(timerIDText)
 					cmd = 'TIMER ' + timerID + ':' + timerAction
 					sendCommand(cmd)
 				},
@@ -594,7 +614,7 @@ module.exports = {
 				label: 'Fade to black',
 				description: 'Not supported on the MDK-111A-K.',
 				options: [],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					cmd = 'FTB'
 					sendCommand(cmd)
 				},
@@ -617,6 +637,7 @@ module.exports = {
 						id: 'key',
 						default: 1,
 						regex: Regex.NUMBER,
+						useVariables: true,
 					},
 					{
 						type: 'dropdown',
@@ -629,10 +650,11 @@ module.exports = {
 						],
 					},
 				],
-				callback: async (event) => {
+				callback: async (event, context) => {
 					let opt = event.options
-					let mle = await parseVariable(opt.mle)
-					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + opt.key
+					let mle = await context.parseVariablesInString(opt.mle)
+					let keyText = await context.parseVariablesInString(opt.key)
+					cmd = 'KEY' + opt.transT + ' ' + mle + ':' + keyText
 					sendCommand(cmd)
 				},
 			}
