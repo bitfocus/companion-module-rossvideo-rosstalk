@@ -1,2 +1,2 @@
 # companion-module-rossvideo-rosstalk
-See HELP.md and LICENSE
+See [HELP.md](./companion/HELP.md) and [LICENSE](./LICENSE)

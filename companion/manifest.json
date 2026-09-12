@@ -24,7 +24,13 @@
 	},
 	"manufacturer": "Ross Video",
 	"products": [
-		"Rosstalk"
+		"Rosstalk",
+		"Acuity",
+		"Carbonite",
+		"Graphite",
+		"openGear",
+		"Vision",
+		"Ultrix"
 	],
 	"keywords": [
 		"Protocol",
