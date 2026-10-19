@@ -1,4 +1,6 @@
 {
+	"$schema": "../node_modules/@companion-module/base/assets/manifest.schema.json",
+	"type": "connection",
 	"id": "rossvideo-rosstalk",
 	"name": "rossvideo-rosstalk",
 	"shortname": "rosstalk",
@@ -9,26 +11,22 @@
 	"bugs": "https://github.com/bitfocus/companion-module-rossvideo-rosstalk/issues",
 	"maintainers": [
 		{
+			"name": "Bitfocus AS",
+			"email": "connections@bitfocus.io"
+		},
+		{
 			"name": "William Viker",
 			"email": "william@bitfocus.io"
 		}
 	],
-	"legacyIds": [
-		"rosstalk"
-	],
+	"legacyIds": ["rosstalk"],
 	"runtime": {
-		"type": "node18",
+		"type": "node22",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
-		"entrypoint": "../rosstalk.js"
+		"entrypoint": "../dist/main.js"
 	},
 	"manufacturer": "Ross Video",
-	"products": [
-		"Rosstalk"
-	],
-	"keywords": [
-		"Protocol",
-		"Vision Mixer",
-		"Software"
-	]
+	"products": ["Rosstalk", "Carbonite", "Graphite", "Acuity", "Vision", "Ultrix", "MDK-111A-M", "MDK-111A-K", "MC1-MK"],
+	"keywords": ["Protocol", "Vision Mixer", "Software", "Switcher", "Router"]
 }

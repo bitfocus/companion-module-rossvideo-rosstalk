@@ -1,0 +1,11 @@
+{
+	"extends": "@companion-module/tools/tsconfig/node22/recommended-esm.json",
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules/**", "src/**/*.test.ts"],
+	"compilerOptions": {
+		"outDir": "./dist",
+		"rootDir": "./src",
+		"alwaysStrict": true,
+		"verbatimModuleSyntax": true
+	}
+}

@@ -1,6 +1,9 @@
 node_modules/
-
-# Companion 3
+package-lock.json
 /pkg
-/pkg.tgz
+/*.tgz
+/dist
+DEBUG-*
+/.yarn
+/.vscode
 .DS_Store

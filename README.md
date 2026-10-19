@@ -1,2 +1,3 @@
 # companion-module-rossvideo-rosstalk
-See HELP.md and LICENSE
+
+See [HELP.md](companion/HELP.md), [LICENSE](LICENSE), and [CHANGELOG.md](companion/CHANGELOG.md)
