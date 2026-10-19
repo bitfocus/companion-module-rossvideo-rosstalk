@@ -79,4 +79,4 @@ Ready-made buttons are provided for GPIs, ME 1 transitions and crosspoints, keye
 
 ### Expressions
 
-Any action field can be switched to an expression, and text fields accept variables. Numeric fields such as GPI, keyer and custom control numbers are number fields, so an expression can compute them.
+Text fields accept variables, including local variables. Number, text and source fields can be switched to an expression, and so can the choices that buttons may want to change at runtime: keyer direction and transition type, transition type, on/off states and the Ultrix timer action. If an expression for one of those choices doesn't give one of its values (e.g. `PAUSE` for a timer), the action is skipped. Setup choices, such as load and save locations, capture mode and video mode, can't be expressions.

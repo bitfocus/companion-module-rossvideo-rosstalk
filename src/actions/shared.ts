@@ -11,7 +11,7 @@ import {
 } from '../commands.js'
 import type RossTalkInstance from '../main.js'
 import {
-	dropdownField,
+	expressionDropdownField,
 	mleField,
 	numberField,
 	textField,
@@ -115,7 +115,7 @@ export class SharedActions {
 	transitionType(choices: DropdownChoice<string>[], regex: string): Definition<'transType'> {
 		return {
 			name: 'Transition type',
-			options: [mleField(choices, regex), dropdownField('type', 'Type', 'DISS', TRANSITION_TYPES)],
+			options: [mleField(choices, regex), expressionDropdownField('type', 'Type', 'DISS', TRANSITION_TYPES)],
 			callback: (event) => this.send(transitionTypeCommand(event.options.mle, event.options.type)),
 		}
 	}

@@ -1,5 +1,5 @@
 import { routerCrosspointCommand, timerCommand, type TimerAction } from '../commands.js'
-import { dropdownField, numberField, textField } from './fields.js'
+import { expressionDropdownField, numberField, textField } from './fields.js'
 import type { ModelActions } from './index.js'
 import type { SharedActions } from './shared.js'
 
@@ -12,7 +12,7 @@ export function UltrixActions(shared: SharedActions): ModelActions {
 		TIMER: {
 			name: 'Ultrix Timer',
 			options: [
-				dropdownField<'timerAction', TimerAction>('timerAction', 'Action type', 'RUN', [
+				expressionDropdownField<'timerAction', TimerAction>('timerAction', 'Action type', 'RUN', [
 					{ id: 'RUN', label: 'Run Timer' },
 					{ id: 'PAUSE', label: 'Pause Timer' },
 					{ id: 'STOP', label: 'Stop Timer' },

@@ -60,8 +60,21 @@ export function dropdownField<TKey extends string, TChoice extends string>(
 	return { type: 'dropdown', id, label, default: defaultValue, choices, disableAutoExpression: true }
 }
 
+/**
+ * A dropdown whose value buttons may want to change at runtime, so it can be switched to an expression.
+ * Companion skips the action if the expression's result isn't one of the choices.
+ */
+export function expressionDropdownField<TKey extends string, TChoice extends string>(
+	id: TKey,
+	label: string,
+	defaultValue: TChoice,
+	choices: DropdownChoice<TChoice>[],
+): CompanionInputFieldDropdown<TKey, TChoice> {
+	return { type: 'dropdown', id, label, default: defaultValue, choices }
+}
+
 export function onOffField<TKey extends string>(id: TKey, label: string): CompanionInputFieldDropdown<TKey, OnOff> {
-	return dropdownField<TKey, OnOff>(id, label, 'ON', [
+	return expressionDropdownField<TKey, OnOff>(id, label, 'ON', [
 		{ id: 'ON', label: 'On' },
 		{ id: 'OFF', label: 'Off' },
 	])
@@ -86,12 +99,17 @@ export const TRANSITION_TYPES: DropdownChoice<TransitionType>[] = [
 	{ id: 'WIPE', label: 'Wipe' },
 ]
 
-export const transitionTypeField = dropdownField<'transT', KeyTransitionType>('transT', 'Transition type', 'CUT', [
-	{ id: 'AUTO', label: 'Auto Transition' },
-	{ id: 'CUT', label: 'Cut Transition' },
-])
+export const transitionTypeField = expressionDropdownField<'transT', KeyTransitionType>(
+	'transT',
+	'Transition type',
+	'CUT',
+	[
+		{ id: 'AUTO', label: 'Auto Transition' },
+		{ id: 'CUT', label: 'Cut Transition' },
+	],
+)
 
-export const transitionDirectionField = dropdownField<'transD', KeyTransitionDirection>(
+export const transitionDirectionField = expressionDropdownField<'transD', KeyTransitionDirection>(
 	'transD',
 	'Transition On/Off Air',
 	'TOGGLE',
