@@ -109,7 +109,7 @@ export function GetActionDefinitions(self: RossTalkInstance, model: Model): Acti
 		},
 		gpiByName: {
 			name: 'Trigger GPI by Name',
-			description: 'Not part of the documented RossTalk protocol, so only works on devices that accept named GPIs',
+			description: 'Only works on devices that accept named GPIs',
 			options: [textField('gpi', 'Name', '', {}), textField('parameter', 'Parameter', '', {})],
 			callback: (event) => {
 				if (event.options.gpi) send(gpiByNameCommand(event.options.gpi, event.options.parameter))

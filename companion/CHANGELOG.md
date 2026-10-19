@@ -49,4 +49,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GPI by name includes the parameter only when one is set.
 - A one-shot connection stays open until its commands have been sent. Commands issued while it is still opening share that connection, and a command that fails to send is dropped so it cannot fire on a later reconnect.
 
-[Unreleased]: https://github.com/bitfocus/companion-module-rossvideo-rosstalk/compare/v2.1.0...HEAD
+[3.0.0]: https://github.com/bitfocus/companion-module-rossvideo-rosstalk/compare/v2.1.0...v3.0.0
