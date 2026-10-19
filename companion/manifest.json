@@ -4,7 +4,7 @@
 	"id": "rossvideo-rosstalk",
 	"name": "rossvideo-rosstalk",
 	"shortname": "rosstalk",
-	"description": "rosstalk plugin for Companion",
+	"description": "Connection for controlling Ross Video devices over RossTalk.",
 	"version": "0.0.0",
 	"license": "MIT",
 	"repository": "git+https://github.com/bitfocus/companion-module-rossvideo-rosstalk.git",
