@@ -1,6 +1,6 @@
 ## Ross Video RossTalk
 
-Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix and openGear devices over RossTalk.
+Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix and openGear (MDK-111A-M, MDK-111A-K, MC1-MK) devices over RossTalk.
 
 In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk reference manual](http://help.rossvideo.com/carbonite-device/Topics/Protocol/RossTalk/CNT/RT-CNT-Comm.html) for value structures.
 
