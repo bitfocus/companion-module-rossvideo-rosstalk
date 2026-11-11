@@ -21,10 +21,10 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			default: 'carbonite',
 			choices: [
 				{ id: 'carbonite', label: 'Carbonite/Graphite' },
-				{ id: 'ultrix', label: 'Ultrix' },
 				{ id: 'acuity', label: 'Acuity/Vision' },
-				{ id: 'opengear', label: 'openGear' },
+				{ id: 'ultrix', label: 'Ultrix' },
 				{ id: 'videoserver', label: 'Ross Video Server (Mira/Tria/Kiva)' },
+				{ id: 'opengear', label: 'openGear' },
 			],
 		},
 		{
