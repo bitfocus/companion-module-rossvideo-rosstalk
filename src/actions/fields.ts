@@ -99,6 +99,13 @@ export const TRANSITION_TYPES: DropdownChoice<TransitionType>[] = [
 	{ id: 'WIPE', label: 'Wipe' },
 ]
 
+export const ACUITY_TRANSITION_TYPES: DropdownChoice<TransitionType>[] = [
+	{ id: 'DISS', label: 'Dissolve' },
+	{ id: 'WIPE', label: 'Wipe' },
+	{ id: 'DVE', label: 'DVE' },
+	{ id: 'SEQ', label: 'Sequence' },
+]
+
 export const transitionTypeField = expressionDropdownField<'transT', KeyTransitionType>(
 	'transT',
 	'Transition type',

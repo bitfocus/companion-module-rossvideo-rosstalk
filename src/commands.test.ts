@@ -132,6 +132,7 @@ describe('carbonite commands from the RossTalk spec', () => {
 		expect(saveSetCommand('set1', '0')).toBe('SAVESET 0:set1')
 		expect(exportRpmSetCommand('myset')).toBe('EXPORTRPMSET myset')
 		expect(memorySaveCommand('19:ME:2:MME:1')).toBe('MEMSAVE 19:ME:2:MME:1')
+		expect(memoryCommand('19:ME:2:MME:1:CK:1')).toBe('MEM 19:ME:2:MME:1:CK:1')
 		expect(sequencerStepCommand('NEXT', 2)).toBe('NEXT 2')
 		expect(sequencerStepCommand('DOWN', 4)).toBe('DOWN 4')
 		expect(sequencerFocusCommand(3, 2)).toBe('FOCUS 3:2')
@@ -171,7 +172,8 @@ describe('acuity commands from the RossTalk spec', () => {
 		expect(captureToMediaStoreCommand('DISK', 1, 'AUX:8:3', 6)).toBe('CAPTURE DISK:1:AUX:8:3:6')
 		expect(captureMeCommand(3, 'PGMC', 2)).toBe('CAPTURE 3:PGMC:2')
 		expect(resetAllCommand()).toBe('RESETALL')
-		expect(setVideoModeCommand('REF', '1080i50')).toBe('SETVIDMODE REF:1080i50')
+		expect(setVideoModeCommand('REF', '1080i 50')).toBe('SETVIDMODE REF:1080i 50')
+		expect(setVideoModeCommand('VID', '480i 16x9')).toBe('SETVIDMODE VID:480i 16x9')
 	})
 })
 

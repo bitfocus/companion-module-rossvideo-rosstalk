@@ -6,7 +6,7 @@ export type TimerAction = 'RUN' | 'PAUSE' | 'STOP' | 'END'
 export type LoadLocation = 'USB' | 'HD'
 /** Ultra 60 drives: 0 is internal, 1-3 are USB in detection order */
 export type Ultra60Drive = '0' | '1' | '2' | '3'
-export type TransitionType = 'DISS' | 'DVE' | 'MEDIA' | 'WIPE'
+export type TransitionType = 'DISS' | 'DVE' | 'MEDIA' | 'WIPE' | 'SEQ'
 export type KeyMode = 'NORMAL' | 'ADDITIVE' | 'FULL'
 export type ClipTransport = 'PLAY' | 'PAUSE' | 'EJECT' | 'LOOPON' | 'LOOPOFF'
 export type SequencerStep = 'NEXT' | 'UP' | 'DOWN'
