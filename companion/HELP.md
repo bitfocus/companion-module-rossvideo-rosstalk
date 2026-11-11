@@ -1,6 +1,6 @@
 ## Ross Video RossTalk
 
-Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix and openGear (MDK-111A-M, MDK-111A-K, MC1-MK) devices over RossTalk.
+Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix, openGear (MDK-111A-M, MDK-111A-K, MC1-MK) and Ross Video Server (Mira, Tria, Kiva) devices over RossTalk.
 
 In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk reference manual](http://help.rossvideo.com/carbonite-device/Topics/Protocol/RossTalk/CNT/RT-CNT-Comm.html) for value structures.
 
@@ -16,14 +16,13 @@ This connection does not support Xpression; use the dedicated connection for Xpr
 
 **All models**
 
-- Trigger GPI
-- Trigger GPI by Name (Only works on devices that accept named GPIs)
+- Trigger GPI and Trigger GPI by Name (only works on devices that accept named GPIs); not available for video servers
 - Send a custom command
 
 **Carbonite / Graphite**
 
 - Fire custom control
-- Load Set / Save Set (with an optional drive for Ultra 60), Export working set to USB
+- Load Set / Save Set (with an optional drive for Ultra 60)
 - Cut / Auto Transition
 - Transition rate, Transition type, Next transition elements
 - XPT (crosspoint)
@@ -73,10 +72,21 @@ MEs are addressed by number (e.g. `1`) for ME, keyer, transition and memory acti
 - Load logo: loads a media file from the CompactFlash card into a Logo channel
 - Arm effect on preset, Take effect on / off air
 
+**Ross Video Server (Mira, Tria, Kiva)**
+
+Channels are addressed by letter (e.g. `A`). Clip names are relative to `H:\video\`; include the subdirectory for clips outside it (e.g. `\news\crime-report`). Timecodes are written as `hh,mm,ss,ff`, e.g. `00,00,15,00`.
+
+- Cue clip, optionally at a timecode
+- Play the loaded clip, or load and play a clip, optionally from a timecode
+- Stop, Eject
+- Go to timecode, Jog (in frames; negative jogs backwards)
+- Loop mode (off, loop, loop to, ping-pong, ping-pong to)
+- Camera angle, for ISO clips
+
 ### Presets
 
-Ready-made buttons are provided for GPIs, ME 1 transitions and crosspoints, keyers and Ultrix timers, depending on the selected model.
+Ready-made buttons are provided for GPIs, ME 1 transitions and crosspoints, keyers, Ultrix timers and video server channels A to D, depending on the selected model.
 
 ### Expressions
 
-Text fields accept variables, including local variables. Number, text and source fields can be switched to an expression, and so can the choices that buttons may want to change at runtime: keyer direction and transition type, transition type, on/off states and the Ultrix timer action. If an expression for one of those choices doesn't give one of its values (e.g. `PAUSE` for a timer), the action is skipped. Setup choices, such as load and save locations, capture mode and video mode, can't be expressions.
+Text fields accept variables, including local variables. Number, text and source fields can be switched to an expression, and so can the choices that buttons may want to change at runtime: keyer direction and transition type, transition type, on/off states, the Ultrix timer action and the video server loop mode. If an expression for one of those choices doesn't give one of its values (e.g. `PAUSE` for a timer), the action is skipped. Setup choices, such as load and save locations, capture mode and video mode, can't be expressions.

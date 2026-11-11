@@ -14,6 +14,7 @@ import {
 	type TimerAction,
 	type TransitionType,
 	type Ultra60Drive,
+	type ServerLoopMode,
 	type UserVariableOperation,
 	type VideoModeTarget,
 	type VideoServerCommand,
@@ -24,6 +25,7 @@ import { AcuityActions } from './acuity.js'
 import { CarboniteActions } from './carbonite.js'
 import { OpenGearActions } from './opengear.js'
 import { UltrixActions } from './ultrix.js'
+import { VideoServerActions } from './videoserver.js'
 import { numberField, textField } from './fields.js'
 import { SharedActions } from './shared.js'
 
@@ -35,7 +37,6 @@ export type RossTalkActions = {
 	cc: { options: { bank: number; cc: number } }
 	loadset: { options: { set: string; location?: LoadLocation; drive?: Ultra60Drive | '' } }
 	saveset: { options: { set: string; location?: LoadLocation; setup?: number; drive?: Ultra60Drive | '' } }
-	exportRpmSet: { options: { name: string } }
 	cut: { options: { mle: string } }
 	autotrans: { options: { mle: string } }
 	transRate: { options: { mle: string; rate: number } }
@@ -76,6 +77,14 @@ export type RossTalkActions = {
 	logoLoad: { options: { channel: number; file: string } }
 	effectArm: { options: { effect: number; armed: boolean } }
 	effectState: { options: { effect: number; onAir: boolean } }
+	serverCue: { options: { channel: string; clip: string; timecode: string } }
+	serverPlay: { options: { channel: string; clip: string; timecode: string } }
+	serverStop: { options: { channel: string } }
+	serverEject: { options: { channel: string } }
+	serverGoto: { options: { channel: string; timecode: string } }
+	serverJog: { options: { channel: string; frames: number } }
+	serverLoop: { options: { channel: string; mode: ServerLoopMode } }
+	serverAngle: { options: { channel: string; angle: number } }
 }
 
 export type Definition<K extends keyof RossTalkActions> = CompanionActionDefinition<RossTalkActions[K]['options']>
@@ -96,11 +105,12 @@ export function GetActionDefinitions(self: RossTalkInstance, model: Model): Acti
 				return UltrixActions(shared)
 			case 'opengear':
 				return OpenGearActions(shared)
+			case 'videoserver':
+				return VideoServerActions(shared)
 		}
 	})()
 
-	// Actions the model doesn't support are left out, which is the same as defining them as undefined
-	return {
+	const gpiActions: ModelActions = {
 		gpi: {
 			// Ultrix treats GPI as a salvo trigger
 			name: model === 'ultrix' ? 'Fire salvo' : 'Trigger GPI',
@@ -115,6 +125,11 @@ export function GetActionDefinitions(self: RossTalkInstance, model: Model): Acti
 				if (event.options.gpi) send(gpiByNameCommand(event.options.gpi, event.options.parameter))
 			},
 		},
+	}
+
+	// Actions the model doesn't support are left out, which is the same as defining them as undefined
+	return {
+		...(model === 'videoserver' ? {} : gpiActions),
 		custom: {
 			name: 'Send a custom command',
 			description: 'Refer to RossTalk Guide',

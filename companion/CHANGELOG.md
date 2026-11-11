@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Presets for GPIs (salvos on Ultrix), ME 1 transitions and crosspoints, keyers, and Ultrix timers, depending on the selected model.
-- Carbonite / Graphite: save set and export the working set to USB, with an optional Ultra 60 drive on load and save set.
+- Carbonite / Graphite: save set, with an optional Ultra 60 drive on load and save set.
 - Carbonite / Graphite: transition rate, transition type, and next transition elements.
 - Carbonite / Graphite: key mode and initialize chroma key.
 - Carbonite / Graphite: save memory, sequencer next / up / down, and sequencer select event.
@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Acuity / Vision: set source name (MNEM), and user variables (set, add, subtract, multiply, divide).
 - Acuity / Vision: set video mode and reset the switcher. Both interrupt the switcher's output.
 - Ultrix: router crosspoint, selecting a source on a destination for a user or panel ID, optionally on specific levels.
+- Ross Video Server (Mira, Tria, Kiva) model: cue, play, stop, eject, go to timecode, jog, loop mode, and camera angle.
 - openGear: load a logo from the CompactFlash card, arm an effect on preset, and take an effect on or off air.
 - Any action field can be an expression, and text fields accept variables.
 

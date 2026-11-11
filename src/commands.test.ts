@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import {
+	serverAngleCommand,
+	serverCueCommand,
+	serverEjectCommand,
+	serverGotoCommand,
+	serverJogCommand,
+	serverLoopCommand,
+	serverPlayCommand,
+	serverStopCommand,
 	effectArmCommand,
 	effectStateCommand,
 	logoLoadCommand,
@@ -20,7 +28,6 @@ import {
 	chromaKeyInitCommand,
 	clipLoadCommand,
 	clipTransportCommand,
-	exportRpmSetCommand,
 	keyModeCommand,
 	mediaStoreCommand,
 	memorySaveCommand,
@@ -130,7 +137,6 @@ describe('carbonite commands from the RossTalk spec', () => {
 	it('matches the documented examples', () => {
 		expect(saveSetCommand('set1', null)).toBe('SAVESET set1')
 		expect(saveSetCommand('set1', '0')).toBe('SAVESET 0:set1')
-		expect(exportRpmSetCommand('myset')).toBe('EXPORTRPMSET myset')
 		expect(memorySaveCommand('19:ME:2:MME:1')).toBe('MEMSAVE 19:ME:2:MME:1')
 		expect(memoryCommand('19:ME:2:MME:1:CK:1')).toBe('MEM 19:ME:2:MME:1:CK:1')
 		expect(sequencerStepCommand('NEXT', 2)).toBe('NEXT 2')
@@ -200,5 +206,29 @@ describe('openGear commands from the RossTalk spec', () => {
 		expect(effectArmCommand(3, false)).toBe('VGPIARM 3:0')
 		expect(effectStateCommand(2, true)).toBe('VGPISTATE 2:1')
 		expect(effectStateCommand(2, false)).toBe('VGPISTATE 2:0')
+	})
+})
+
+describe('video server commands from the RossTalk spec', () => {
+	it('matches the documented examples', () => {
+		expect(serverCueCommand('D', 'crime-report', '')).toBe('CUE D:crime-report')
+		expect(serverCueCommand('A', 'goal-highlight', '00,00,15,00')).toBe('CUE A:goal-highlight:00,00,15,00')
+		expect(serverPlayCommand('B', '', '')).toBe('PLAY B')
+		expect(serverPlayCommand('B', 'storm', '')).toBe('PLAY B:storm')
+		expect(serverPlayCommand('B', 'storm', '00,00,03,10')).toBe('PLAY B:storm:00,00,03,10')
+		expect(serverStopCommand('F')).toBe('STOP F')
+		expect(serverGotoCommand('A', '00,00,00,20')).toBe('GOTO A:00,00,00,20')
+		expect(serverJogCommand('C', -20)).toBe('JOG C:-20f')
+		expect(serverLoopCommand('B', 'loop')).toBe('LOOP B:loop')
+		expect(serverAngleCommand('A', 3)).toBe('ANGLE A:3')
+		expect(serverEjectCommand('A')).toBe('EJECT A')
+	})
+
+	it('ignores a timecode when playing the loaded clip', () => {
+		expect(serverPlayCommand('B', '', '00,00,03,10')).toBe('PLAY B')
+	})
+
+	it('keeps subdirectory paths in clip names', () => {
+		expect(serverCueCommand('A', '\\news\\crime-report', '')).toBe('CUE A:\\news\\crime-report')
 	})
 })

@@ -16,6 +16,7 @@ export type UserVariableOperation = '=' | '+' | '-' | '*' | '/'
 export type CaptureMode = 'DISK' | 'RAM'
 export type VideoModeTarget = 'REF' | 'VID'
 export type MultiviewerType = 'VP' | 'IO'
+export type ServerLoopMode = 'off' | 'loop' | 'loop-to' | 'ping-pong' | 'ping-pong-to'
 
 function pad2(value: number): string {
 	return value <= 9 ? `0${value}` : String(value)
@@ -49,10 +50,6 @@ export function saveSetCommand(set: string, location: Ultra60Drive | null): stri
 /** Without a setup number, Acuity matches the set name and overwrites it */
 export function acuitySaveSetCommand(location: LoadLocation, setup: number | null, set: string): string {
 	return setup ? `SAVESET ${location}:${setup}:${set}` : `SAVESET ${location}:${set}`
-}
-
-export function exportRpmSetCommand(name: string): string {
-	return `EXPORTRPMSET ${name}`
 }
 
 export function cutCommand(mle: string): string {
@@ -224,4 +221,42 @@ export function effectArmCommand(effect: number, armed: boolean): string {
 
 export function effectStateCommand(effect: number, onAir: boolean): string {
 	return `VGPISTATE ${effect}:${onAir ? 1 : 0}`
+}
+
+/** Video server timecodes are comma separated, e.g. 00,00,15,00; an empty timecode starts from the beginning */
+function clipAddress(channel: string, clip: string, timecode: string): string {
+	return [channel, clip, ...(timecode ? [timecode] : [])].join(':')
+}
+
+export function serverCueCommand(channel: string, clip: string, timecode: string): string {
+	return `CUE ${clipAddress(channel, clip, timecode)}`
+}
+
+/** Without a clip, plays whatever is already loaded into the channel */
+export function serverPlayCommand(channel: string, clip: string, timecode: string): string {
+	return clip ? `PLAY ${clipAddress(channel, clip, timecode)}` : `PLAY ${channel}`
+}
+
+export function serverStopCommand(channel: string): string {
+	return `STOP ${channel}`
+}
+
+export function serverEjectCommand(channel: string): string {
+	return `EJECT ${channel}`
+}
+
+export function serverGotoCommand(channel: string, timecode: string): string {
+	return `GOTO ${channel}:${timecode}`
+}
+
+export function serverJogCommand(channel: string, frames: number): string {
+	return `JOG ${channel}:${frames}f`
+}
+
+export function serverLoopCommand(channel: string, mode: ServerLoopMode): string {
+	return `LOOP ${channel}:${mode}`
+}
+
+export function serverAngleCommand(channel: string, angle: number): string {
+	return `ANGLE ${channel}:${angle}`
 }

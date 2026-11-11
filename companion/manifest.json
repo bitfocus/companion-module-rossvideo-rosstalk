@@ -27,6 +27,19 @@
 		"entrypoint": "../dist/main.js"
 	},
 	"manufacturer": "Ross Video",
-	"products": ["Rosstalk", "Carbonite", "Graphite", "Acuity", "Vision", "Ultrix", "MDK-111A-M", "MDK-111A-K", "MC1-MK"],
-	"keywords": ["Protocol", "Vision Mixer", "Software", "Switcher", "Router"]
+	"products": [
+		"Rosstalk",
+		"Carbonite",
+		"Graphite",
+		"Acuity",
+		"Vision",
+		"Ultrix",
+		"Mira",
+		"Tria",
+		"Kiva",
+		"MDK-111A-M",
+		"MDK-111A-K",
+		"MC1-MK"
+	],
+	"keywords": ["Protocol", "Vision Mixer", "Software", "Switcher", "Router", "Video Server", "Playout"]
 }

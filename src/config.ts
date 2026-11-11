@@ -1,6 +1,6 @@
 import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
-export type Model = 'carbonite' | 'ultrix' | 'acuity' | 'opengear'
+export type Model = 'carbonite' | 'ultrix' | 'acuity' | 'opengear' | 'videoserver'
 
 export const DEFAULT_PORT = 7788
 
@@ -24,6 +24,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 				{ id: 'ultrix', label: 'Ultrix' },
 				{ id: 'acuity', label: 'Acuity/Vision' },
 				{ id: 'opengear', label: 'openGear' },
+				{ id: 'videoserver', label: 'Ross Video Server (Mira/Tria/Kiva)' },
 			],
 		},
 		{
