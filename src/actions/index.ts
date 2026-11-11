@@ -87,7 +87,7 @@ export type RossTalkActions = {
 	serverAngle: { options: { channel: string; angle: number } }
 }
 
-export type Definition<K extends keyof RossTalkActions> = CompanionActionDefinition<RossTalkActions[K]['options']>
+export type Definition<K extends keyof RossTalkActions> = CompanionActionDefinition<RossTalkActions[K]>
 type ActionDefinitions = CompanionActionDefinitions<RossTalkActions>
 export type ModelActions = Partial<ActionDefinitions>
 

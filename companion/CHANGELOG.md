@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The module now runs on Node.js 26 and uses module API 2.1.
 - The host field accepts a hostname as well as an IP address, and the port is a number field. An existing text port is converted on upgrade.
 - GPI, custom control, keyer, sequence, multiviewer, and timer fields are number fields. Values that used variables are converted to expressions.
 - ME, destination, and source fields are dropdowns. Values that contained variables are converted to expressions.
