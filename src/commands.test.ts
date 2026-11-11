@@ -1,5 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import {
+	serverAngleCommand,
+	serverCueCommand,
+	serverEjectCommand,
+	serverGotoCommand,
+	serverJogCommand,
+	serverLoopCommand,
+	serverPlayCommand,
+	serverStopCommand,
 	effectArmCommand,
 	effectStateCommand,
 	logoLoadCommand,
@@ -20,7 +28,6 @@ import {
 	chromaKeyInitCommand,
 	clipLoadCommand,
 	clipTransportCommand,
-	exportRpmSetCommand,
 	keyModeCommand,
 	mediaStoreCommand,
 	memorySaveCommand,
@@ -59,6 +66,17 @@ describe('gpiCommand', () => {
 		expect(gpiCommand('ultrix', 3)).toBe('GPI 3')
 		expect(gpiCommand('opengear', 3)).toBe('GPI 3')
 	})
+
+	it('pads GPI 0', () => {
+		expect(gpiCommand('carbonite', 0)).toBe('GPI 00')
+	})
+})
+
+describe('gpiOutputCommand', () => {
+	it('sends On and Off in the documented case', () => {
+		expect(gpiOutputCommand('acuity', 4, 'ON')).toBe('GPI 04:On')
+		expect(gpiOutputCommand('acuity', 4, 'OFF')).toBe('GPI 04:Off')
+	})
 })
 
 describe('gpiByNameCommand', () => {
@@ -69,12 +87,21 @@ describe('gpiByNameCommand', () => {
 	it('appends the parameter', () => {
 		expect(gpiByNameCommand('start', 'x')).toBe('GPI start:x')
 	})
+
+	it('can send the Graphite HIGH and LOW triggers', () => {
+		expect(gpiByNameCommand('08', 'HIGH')).toBe('GPI 08:HIGH')
+		expect(gpiByNameCommand('12', 'LOW')).toBe('GPI 12:LOW')
+	})
 })
 
 describe('customControlCommand', () => {
 	it('pads the control number to two digits', () => {
 		expect(customControlCommand(1, 5)).toBe('CC 1:05')
 		expect(customControlCommand(2, 15)).toBe('CC 2:15')
+	})
+
+	it('does not truncate three digit controls', () => {
+		expect(customControlCommand(1, 100)).toBe('CC 1:100')
 	})
 })
 
@@ -117,6 +144,16 @@ describe('transitionIncludeCommand', () => {
 		expect(transitionIncludeCommand('ME:2', true, [3, 2])).toBe('TRANSINCL ME:2:B:2:3')
 	})
 
+	it('sorts keys numerically and does not change the input', () => {
+		const keys = [10, 2, 1]
+		expect(transitionIncludeCommand('ME:1', false, keys)).toBe('TRANSINCL ME:1:1:2:10')
+		expect(keys).toEqual([10, 2, 1])
+	})
+
+	it('can include the background only', () => {
+		expect(transitionIncludeCommand('2', true, [])).toBe('TRANSINCL 2:B')
+	})
+
 	it('can include keys only', () => {
 		expect(transitionIncludeCommand('ME:1', false, [1])).toBe('TRANSINCL ME:1:1')
 	})
@@ -130,8 +167,8 @@ describe('carbonite commands from the RossTalk spec', () => {
 	it('matches the documented examples', () => {
 		expect(saveSetCommand('set1', null)).toBe('SAVESET set1')
 		expect(saveSetCommand('set1', '0')).toBe('SAVESET 0:set1')
-		expect(exportRpmSetCommand('myset')).toBe('EXPORTRPMSET myset')
 		expect(memorySaveCommand('19:ME:2:MME:1')).toBe('MEMSAVE 19:ME:2:MME:1')
+		expect(memoryCommand('19:ME:2:MME:1:CK:1')).toBe('MEM 19:ME:2:MME:1:CK:1')
 		expect(sequencerStepCommand('NEXT', 2)).toBe('NEXT 2')
 		expect(sequencerStepCommand('DOWN', 4)).toBe('DOWN 4')
 		expect(sequencerFocusCommand(3, 2)).toBe('FOCUS 3:2')
@@ -144,6 +181,8 @@ describe('carbonite commands from the RossTalk spec', () => {
 		expect(mediaStoreCommand(1, '0', '002')).toBe('MS 1:0:002')
 		expect(mnemonicCommand('IN:6', 'CAM 1')).toBe('MNEM IN:6:CAM 1')
 		expect(multiviewerBoxCommand('VP', 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT VP:1:5:IN:6')
+		expect(multiviewerBoxCommand('OP', 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT OP:1:5:IN:6')
+		expect(multiviewerBoxCommand(null, 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT 1:5:IN:6')
 		expect(noopCommand()).toBe('NOOP')
 	})
 })
@@ -171,7 +210,8 @@ describe('acuity commands from the RossTalk spec', () => {
 		expect(captureToMediaStoreCommand('DISK', 1, 'AUX:8:3', 6)).toBe('CAPTURE DISK:1:AUX:8:3:6')
 		expect(captureMeCommand(3, 'PGMC', 2)).toBe('CAPTURE 3:PGMC:2')
 		expect(resetAllCommand()).toBe('RESETALL')
-		expect(setVideoModeCommand('REF', '1080i50')).toBe('SETVIDMODE REF:1080i50')
+		expect(setVideoModeCommand('REF', '1080i 50')).toBe('SETVIDMODE REF:1080i 50')
+		expect(setVideoModeCommand('VID', '480i 16x9')).toBe('SETVIDMODE VID:480i 16x9')
 	})
 })
 
@@ -198,5 +238,29 @@ describe('openGear commands from the RossTalk spec', () => {
 		expect(effectArmCommand(3, false)).toBe('VGPIARM 3:0')
 		expect(effectStateCommand(2, true)).toBe('VGPISTATE 2:1')
 		expect(effectStateCommand(2, false)).toBe('VGPISTATE 2:0')
+	})
+})
+
+describe('video server commands from the RossTalk spec', () => {
+	it('matches the documented examples', () => {
+		expect(serverCueCommand('D', 'crime-report', '')).toBe('CUE D:crime-report')
+		expect(serverCueCommand('A', 'goal-highlight', '00,00,15,00')).toBe('CUE A:goal-highlight:00,00,15,00')
+		expect(serverPlayCommand('B', '', '')).toBe('PLAY B')
+		expect(serverPlayCommand('B', 'storm', '')).toBe('PLAY B:storm')
+		expect(serverPlayCommand('B', 'storm', '00,00,03,10')).toBe('PLAY B:storm:00,00,03,10')
+		expect(serverStopCommand('F')).toBe('STOP F')
+		expect(serverGotoCommand('A', '00,00,00,20')).toBe('GOTO A:00,00,00,20')
+		expect(serverJogCommand('C', -20)).toBe('JOG C:-20f')
+		expect(serverLoopCommand('B', 'loop')).toBe('LOOP B:loop')
+		expect(serverAngleCommand('A', 3)).toBe('ANGLE A:3')
+		expect(serverEjectCommand('A')).toBe('EJECT A')
+	})
+
+	it('ignores a timecode when playing the loaded clip', () => {
+		expect(serverPlayCommand('B', '', '00,00,03,10')).toBe('PLAY B')
+	})
+
+	it('keeps subdirectory paths in clip names', () => {
+		expect(serverCueCommand('A', '\\news\\crime-report', '')).toBe('CUE A:\\news\\crime-report')
 	})
 })

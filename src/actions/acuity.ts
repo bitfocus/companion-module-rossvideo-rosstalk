@@ -24,7 +24,16 @@ import {
 	type VideoModeTarget,
 	type VideoServerCommand,
 } from '../commands.js'
-import { ACUITY_LOCATIONS, dropdownField, mleField, numberField, onOffField, textField, videoField } from './fields.js'
+import {
+	ACUITY_LOCATIONS,
+	ACUITY_TRANSITION_TYPES,
+	dropdownField,
+	mleField,
+	numberField,
+	onOffField,
+	textField,
+	videoField,
+} from './fields.js'
 import type { ModelActions } from './index.js'
 import type { SharedActions } from './shared.js'
 
@@ -38,13 +47,14 @@ const MEDIA_STORE_CHOICES = [
 	...MLE_NUMBER_CHOICES.map((me) => ({ id: me.id, label: `ME-Store on ${me.label}` })),
 ]
 
+// The format and frequency are separated by a space, e.g. SETVIDMODE VID:1080i 59.94
 const VIDEO_FORMATS = [
-	'1080i59.94',
-	'1080i50',
-	'1080p59.94',
-	'1080p50',
-	'720p59.94',
-	'720p50',
+	'1080i 59.94',
+	'1080i 50',
+	'1080p 59.94',
+	'1080p 50',
+	'720p 59.94',
+	'720p 50',
 	'480i',
 	'480i 16x9',
 	'576i',
@@ -82,7 +92,7 @@ export function AcuityActions(shared: SharedActions, model: 'acuity'): ModelActi
 		cut: shared.mleAction('Cut', cutCommand, MLE_NUMBER_CHOICES, Regex.NUMBER),
 		autotrans: shared.mleAction('Auto Transition', autoTransitionCommand, MLE_NUMBER_CHOICES, Regex.NUMBER),
 		transRate: shared.transitionRate(MLE_NUMBER_CHOICES, Regex.NUMBER),
-		transType: shared.transitionType(MLE_NUMBER_CHOICES, Regex.NUMBER),
+		transType: shared.transitionType(MLE_NUMBER_CHOICES, Regex.NUMBER, ACUITY_TRANSITION_TYPES),
 		transIncl: shared.transitionInclude(MLE_NUMBER_CHOICES, Regex.NUMBER),
 		xpt: shared.crosspoint(ACUITY_VIDEO_DESTINATION_CHOICES, ACUITY_VIDEO_SOURCE_CHOICES),
 		// Acuity addresses keyers as `ME:keyer` with a bare ME number, e.g. KEYAUTO 1:4
@@ -163,7 +173,7 @@ export function AcuityActions(shared: SharedActions, model: 'acuity'): ModelActi
 			description: 'Ultrix Acuity only',
 			options: [
 				numberField('me', 'ME', 1, 1),
-				textField('source', 'ME source', 'PGMA', { tooltip: 'e.g. PGMC for Program C' }),
+				textField('source', 'ME source', 'PGM', { tooltip: 'PGM for Program A, PGMB to PGMF for Programs B to F' }),
 				numberField('channel', 'Media-Store channel', 1, 1),
 			],
 			callback: (event) => send(captureMeCommand(event.options.me, event.options.source, event.options.channel)),
@@ -221,7 +231,7 @@ export function AcuityActions(shared: SharedActions, model: 'acuity'): ModelActi
 				videoField(
 					'format',
 					'Format',
-					'1080i59.94',
+					'1080i 59.94',
 					VIDEO_FORMATS.map((format) => ({ id: format, label: format })),
 				),
 			],

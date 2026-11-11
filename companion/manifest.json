@@ -21,12 +21,24 @@
 	],
 	"legacyIds": ["rosstalk"],
 	"runtime": {
-		"type": "node22",
+		"type": "node26",
 		"api": "nodejs-ipc",
 		"apiVersion": "0.0.0",
 		"entrypoint": "../dist/main.js"
 	},
 	"manufacturer": "Ross Video",
-	"products": ["Rosstalk", "Carbonite", "Graphite", "Acuity", "Vision", "Ultrix", "MDK-111A-M", "MDK-111A-K", "MC1-MK"],
-	"keywords": ["Protocol", "Vision Mixer", "Software", "Switcher", "Router"]
+	"products": [
+		"Rosstalk",
+		"Carbonite",
+		"Graphite",
+		"Acuity",
+		"Vision",
+		"Ultrix",
+		"Mira",
+		"Tria",
+		"Kiva",
+		"MDK-111A-M/K",
+		"MC1-MK"
+	],
+	"keywords": ["Protocol", "Vision Mixer", "Software", "Switcher", "Router", "Video Server", "Playout"]
 }

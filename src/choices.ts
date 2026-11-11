@@ -64,8 +64,8 @@ export const VIDEO_SOURCE_CHOICES: DropdownChoice<string>[] = [
 	...MEDIA_STORE_CHANNELS.map((ms) => choice(`MS:${ms}`, `Media-Store ${ms}`)),
 	...CHROMA_KEYS.map((ck) => choice(`CK:${ck}`, `Chroma Key ${ck} Video`)),
 	...CHROMA_KEYS.map((ck) => choice(`CKA:${ck}`, `Chroma Key ${ck} Alpha`)),
-	...SCENES.map((scene) => choice(`SNC:${scene}`, `UltraScene ${scene} Video`)),
-	...SCENES.map((scene) => choice(`SNCA:${scene}`, `UltraScene ${scene} Alpha`)),
+	...SCENES.map((scene) => choice(`SCN:${scene}`, `Scene ${scene} Video`)),
+	...SCENES.map((scene) => choice(`SCNA:${scene}`, `Scene ${scene} Alpha`)),
 	// Graphite only
 	...XPRESSION_CHANNELS.map((xp) => choice(`XP:${xp}:V`, `XPression ${xp} Video`)),
 	...XPRESSION_CHANNELS.map((xp) => choice(`XP:${xp}:A`, `XPression ${xp} Alpha`)),

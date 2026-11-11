@@ -13,8 +13,14 @@ import type {
 	Ultra60Drive,
 } from '../commands.js'
 
-// Carbonite Ultra names its program ME `P/P`
-export const RE_ME_SOURCE = '/^(ME|MME|MSC):([0-9]{1,2}|P\\/P)$/'
+/**
+ * An ME, MiniME or MultiScreen, unanchored so it can be embedded in other patterns.
+ * Carbonite Ultra names its program ME `P/P`; HyperMax names it `PP` and addresses split-ME sides with an
+ * A, B or AB suffix, e.g. ME:1B or ME:PPAB.
+ */
+export const ME_SOURCE_PATTERN = '(ME|MME|MSC):([0-9]{1,2}|P\\/P)|ME:([0-9]{1,2}|PP)(A|B|AB)?'
+
+export const RE_ME_SOURCE = `/^(${ME_SOURCE_PATTERN})$/`
 
 export function numberField<TKey extends string>(
 	id: TKey,
@@ -97,6 +103,13 @@ export const TRANSITION_TYPES: DropdownChoice<TransitionType>[] = [
 	{ id: 'DVE', label: 'DVE' },
 	{ id: 'MEDIA', label: 'Media Wipe' },
 	{ id: 'WIPE', label: 'Wipe' },
+]
+
+export const ACUITY_TRANSITION_TYPES: DropdownChoice<TransitionType>[] = [
+	{ id: 'DISS', label: 'Dissolve' },
+	{ id: 'WIPE', label: 'Wipe' },
+	{ id: 'DVE', label: 'DVE' },
+	{ id: 'SEQ', label: 'Sequence' },
 ]
 
 export const transitionTypeField = expressionDropdownField<'transT', KeyTransitionType>(

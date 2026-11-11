@@ -76,7 +76,7 @@ describe('fixupVariablesToExpression', () => {
 })
 
 describe('textToDropdownsUpgrade', () => {
-	it('adds the MultiViewer type to MVBOX actions', () => {
+	it('gives MVBOX actions no MultiViewer type', () => {
 		const result = textToDropdownsUpgrade(context, {
 			config: null,
 			secrets: null,
@@ -84,7 +84,7 @@ describe('textToDropdownsUpgrade', () => {
 			feedbacks: [],
 		})
 
-		expect(result.updatedActions[0].options.mvType).toEqual({ isExpression: false, value: 'VP' })
+		expect(result.updatedActions[0].options.mvType).toEqual({ isExpression: false, value: '' })
 	})
 })
 

@@ -1,6 +1,6 @@
 import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
-export type Model = 'carbonite' | 'ultrix' | 'acuity' | 'opengear'
+export type Model = 'carbonite' | 'ultrix' | 'acuity' | 'opengear' | 'videoserver'
 
 export const DEFAULT_PORT = 7788
 
@@ -21,22 +21,23 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			default: 'carbonite',
 			choices: [
 				{ id: 'carbonite', label: 'Carbonite/Graphite' },
-				{ id: 'ultrix', label: 'Ultrix' },
 				{ id: 'acuity', label: 'Acuity/Vision' },
+				{ id: 'ultrix', label: 'Ultrix' },
+				{ id: 'videoserver', label: 'Ross Video Server (Mira/Tria/Kiva)' },
 				{ id: 'opengear', label: 'openGear' },
 			],
 		},
 		{
 			type: 'textinput',
 			id: 'host',
-			label: 'Switcher Frame IP / Hostname',
+			label: 'Device IP / Hostname',
 			width: 6,
 			regex: Regex.HOSTNAME,
 		},
 		{
 			type: 'number',
 			id: 'port',
-			label: 'Switcher Frame Port',
+			label: 'Device Port',
 			width: 6,
 			default: DEFAULT_PORT,
 			min: 1,

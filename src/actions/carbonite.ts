@@ -6,7 +6,6 @@ import {
 	clipLoadCommand,
 	clipTransportCommand,
 	cutCommand,
-	exportRpmSetCommand,
 	keyModeCommand,
 	loadSetCommand,
 	mediaStoreCommand,
@@ -24,12 +23,22 @@ import {
 	type SequencerStep,
 	type Ultra60Drive,
 } from '../commands.js'
-import { dropdownField, mleField, numberField, RE_ME_SOURCE, textField, ULTRA_60_DRIVES, videoField } from './fields.js'
+import {
+	dropdownField,
+	ME_SOURCE_PATTERN,
+	mleField,
+	numberField,
+	RE_ME_SOURCE,
+	textField,
+	TRANSITION_TYPES,
+	ULTRA_60_DRIVES,
+	videoField,
+} from './fields.js'
 import type { ModelActions } from './index.js'
 import type { SharedActions } from './shared.js'
 
-// Bank and memory are one digit each, e.g. 19 is bank 1 memory 9
-const RE_MEMORY = '/^[0-9]{2}(:(ME|MME|MSC):([0-9]{1,2}|P\\/P))+$/'
+// Bank and memory are one digit each, e.g. 19 is bank 1 memory 9, followed by MEs and/or chroma keys
+export const RE_MEMORY = `/^[0-9]{2}(:(${ME_SOURCE_PATTERN})|:CK:[0-9]{1,2})+$/`
 
 const setDriveField = dropdownField<'drive', Ultra60Drive | ''>('drive', 'Drive (Ultra 60 only)', '', [
 	{ id: '', label: 'Default' },
@@ -51,15 +60,10 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 			options: [textField('set', 'Set name', 'set1', {}), setDriveField],
 			callback: (event) => send(saveSetCommand(event.options.set, event.options.drive || null)),
 		},
-		exportRpmSet: {
-			name: 'Export working set to USB',
-			options: [textField('name', 'Set name', 'myset', {})],
-			callback: (event) => send(exportRpmSetCommand(event.options.name)),
-		},
 		cut: shared.mleAction('Cut', cutCommand, MLE_CHOICES, RE_ME_SOURCE),
 		autotrans: shared.mleAction('Auto Transition', autoTransitionCommand, MLE_CHOICES, RE_ME_SOURCE),
 		transRate: shared.transitionRate(MLE_CHOICES, RE_ME_SOURCE),
-		transType: shared.transitionType(MLE_CHOICES, RE_ME_SOURCE),
+		transType: shared.transitionType(MLE_CHOICES, RE_ME_SOURCE, TRANSITION_TYPES),
 		transIncl: shared.transitionInclude(MLE_CHOICES, RE_ME_SOURCE),
 		xpt: shared.crosspoint(VIDEO_DESTINATION_CHOICES, VIDEO_SOURCE_CHOICES),
 		transKey: shared.keyTransition(true, MLE_CHOICES, RE_ME_SOURCE),
@@ -86,14 +90,14 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 			'MEM',
 			memoryCommand,
 			'11:ME:1',
-			'Bank and memory followed by one or more MEs, e.g. 19:ME:2:MME:1 recalls bank 1 memory 9 on ME 2 and MiniME 1',
+			'Bank and memory followed by one or more MEs, e.g. 19:ME:2:MME:1:CK:1 recalls bank 1 memory 9 on ME 2, MiniME 1 and Chroma Key 1',
 			RE_MEMORY,
 		),
 		memSave: shared.memory(
 			'Save memory (MEMSAVE)',
 			memorySaveCommand,
 			'11:ME:1',
-			'Bank and memory followed by one or more MEs, e.g. 19:ME:2:MME:1 stores bank 1 memory 9 on ME 2 and MiniME 1',
+			'Bank and memory followed by one or more MEs, e.g. 19:ME:2:MME:1:CK:1 stores bank 1 memory 9 on ME 2, MiniME 1 and Chroma Key 1',
 			RE_MEMORY,
 		),
 		SEQI: {
@@ -127,10 +131,15 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 		MVBOX: {
 			name: 'Change multiviewer box',
 			options: [
-				dropdownField<'mvType', MultiviewerType>('mvType', 'MultiViewer', 'VP', [
-					{ id: 'VP', label: 'Video Processor' },
-					{ id: 'IO', label: 'I/O' },
-				]),
+				{
+					...dropdownField<'mvType', MultiviewerType | ''>('mvType', 'MultiViewer type', '', [
+						{ id: '', label: 'None' },
+						{ id: 'VP', label: 'Video Processor (VP)' },
+						{ id: 'IO', label: 'I/O (IO)' },
+						{ id: 'OP', label: 'Output (OP)' },
+					]),
+					tooltip: 'Newer software may need VP or IO, and some versions use OP for the shifted box.',
+				},
 				numberField('mvID', 'Multiviewer Number', 1, 1),
 				numberField('boxID', 'Box Number', 1, 1),
 				videoField('vidSource', 'Source', 'IN:5', VIDEO_SOURCE_CHOICES),
@@ -139,7 +148,7 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 			callback: (event) =>
 				send(
 					multiviewerBoxCommand(
-						event.options.mvType ?? 'VP',
+						event.options.mvType || null,
 						event.options.mvID,
 						event.options.boxID,
 						event.options.vidSource,
