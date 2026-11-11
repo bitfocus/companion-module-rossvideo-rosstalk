@@ -66,6 +66,17 @@ describe('gpiCommand', () => {
 		expect(gpiCommand('ultrix', 3)).toBe('GPI 3')
 		expect(gpiCommand('opengear', 3)).toBe('GPI 3')
 	})
+
+	it('pads GPI 0', () => {
+		expect(gpiCommand('carbonite', 0)).toBe('GPI 00')
+	})
+})
+
+describe('gpiOutputCommand', () => {
+	it('sends On and Off in the documented case', () => {
+		expect(gpiOutputCommand('acuity', 4, 'ON')).toBe('GPI 04:On')
+		expect(gpiOutputCommand('acuity', 4, 'OFF')).toBe('GPI 04:Off')
+	})
 })
 
 describe('gpiByNameCommand', () => {
@@ -76,12 +87,21 @@ describe('gpiByNameCommand', () => {
 	it('appends the parameter', () => {
 		expect(gpiByNameCommand('start', 'x')).toBe('GPI start:x')
 	})
+
+	it('can send the Graphite HIGH and LOW triggers', () => {
+		expect(gpiByNameCommand('08', 'HIGH')).toBe('GPI 08:HIGH')
+		expect(gpiByNameCommand('12', 'LOW')).toBe('GPI 12:LOW')
+	})
 })
 
 describe('customControlCommand', () => {
 	it('pads the control number to two digits', () => {
 		expect(customControlCommand(1, 5)).toBe('CC 1:05')
 		expect(customControlCommand(2, 15)).toBe('CC 2:15')
+	})
+
+	it('does not truncate three digit controls', () => {
+		expect(customControlCommand(1, 100)).toBe('CC 1:100')
 	})
 })
 
@@ -122,6 +142,16 @@ describe('simple commands', () => {
 describe('transitionIncludeCommand', () => {
 	it('includes the background first, then keys in order', () => {
 		expect(transitionIncludeCommand('ME:2', true, [3, 2])).toBe('TRANSINCL ME:2:B:2:3')
+	})
+
+	it('sorts keys numerically and does not change the input', () => {
+		const keys = [10, 2, 1]
+		expect(transitionIncludeCommand('ME:1', false, keys)).toBe('TRANSINCL ME:1:1:2:10')
+		expect(keys).toEqual([10, 2, 1])
+	})
+
+	it('can include the background only', () => {
+		expect(transitionIncludeCommand('2', true, [])).toBe('TRANSINCL 2:B')
 	})
 
 	it('can include keys only', () => {
