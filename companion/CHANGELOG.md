@@ -40,13 +40,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - On Ultrix, the GPI action is labeled Fire salvo.
 - Acuity / Vision crosspoints use the `MLE:` prefix, which Vision requires and Acuity accepts. Keyers are addressed by a bare ME number (for example `KEYAUTO 1:4`).
 - Acuity / Vision keyer transitions can be sent on air, off air, or toggled.
-- Carbonite multiviewer actions include a MultiViewer type (Video Processor or I/O) and an optional shifted box. Existing actions default to Video Processor.
+- Carbonite multiviewer actions have an optional MultiViewer type (None, VP, IO or OP) and an optional shifted box
 - openGear key transitions address the card's single ME as `1`.
 - With TCP Keep Alive disabled, commands fired together share one connection, and the status reads "Connects per command" until a command is sent. A missing host is reported as a bad configuration.
 
 ### Fixed
 
-- Carbonite multiviewer commands include the MultiViewer type the switcher requires (`MVBOX VP:1:1:IN:5`).
+- Carbonite multiviewer commands have a space after the command name (`MVBOX 1:1:IN:5`, previously `MVBOX:1:1:IN:5`).
 - Existing Acuity keyer actions that were stored with an `ME:` or `MLE:` prefix are converted back to a bare ME number.
 - GPI by name includes the parameter only when one is set.
 - A one-shot connection stays open until its commands have been sent. Commands issued while it is still opening share that connection, and a command that fails to send is dropped so it cannot fire on a later reconnect.

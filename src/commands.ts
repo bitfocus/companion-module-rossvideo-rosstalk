@@ -15,7 +15,7 @@ export type VideoServerCommand = 'PLAY' | 'PAUSE' | 'EJECT'
 export type UserVariableOperation = '=' | '+' | '-' | '*' | '/'
 export type CaptureMode = 'DISK' | 'RAM'
 export type VideoModeTarget = 'REF' | 'VID'
-export type MultiviewerType = 'VP' | 'IO'
+export type MultiviewerType = 'VP' | 'IO' | 'OP'
 export type ServerLoopMode = 'off' | 'loop' | 'loop-to' | 'ping-pong' | 'ping-pong-to'
 
 function pad2(value: number): string {
@@ -93,7 +93,7 @@ export function sequenceOutCommand(sequencer: number): string {
 	return `SEQO ${sequencer}`
 }
 
-/** Carbonite needs the MultiViewer type (VP or IO); Acuity has none */
+/** The v35 reference gives Carbonite a MultiViewer type, but Carbonite Black 15.x takes none (like Acuity) */
 export function multiviewerBoxCommand(
 	type: MultiviewerType | null,
 	multiviewer: number,

@@ -57,7 +57,7 @@ export type RossTalkActions = {
 	seqStep: { options: { step: SequencerStep; sequencer: number } }
 	seqFocus: { options: { sequencer: number; event: number } }
 	MVBOX: {
-		options: { mvType?: MultiviewerType; mvID: number; boxID: number; vidSource: string; shift?: boolean }
+		options: { mvType?: MultiviewerType | ''; mvID: number; boxID: number; vidSource: string; shift?: boolean }
 	}
 	clipLoad: { options: { name: string } }
 	clipTransport: { options: { transport: ClipTransport } }

@@ -89,9 +89,9 @@ export const textToDropdownsUpgrade: CompanionStaticUpgradeScript<ModuleConfig> 
 		for (const key of keys) {
 			action.options[key] = fixupVariablesToExpression(action.options[key])
 		}
-		// MVBOX was sent without the MultiViewer type, which the switcher requires
+		// Keep sending MVBOX without a MultiViewer type, as Carbonite Black 15.x doesn't accept one
 		if (action.actionId === 'MVBOX' && !action.options.mvType) {
-			action.options.mvType = { isExpression: false, value: 'VP' }
+			action.options.mvType = { isExpression: false, value: '' }
 		}
 		result.updatedActions.push(action)
 	}

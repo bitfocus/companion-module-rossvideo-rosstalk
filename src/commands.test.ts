@@ -181,6 +181,8 @@ describe('carbonite commands from the RossTalk spec', () => {
 		expect(mediaStoreCommand(1, '0', '002')).toBe('MS 1:0:002')
 		expect(mnemonicCommand('IN:6', 'CAM 1')).toBe('MNEM IN:6:CAM 1')
 		expect(multiviewerBoxCommand('VP', 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT VP:1:5:IN:6')
+		expect(multiviewerBoxCommand('OP', 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT OP:1:5:IN:6')
+		expect(multiviewerBoxCommand(null, 1, 5, 'IN:6', true)).toBe('MVBOXSHIFT 1:5:IN:6')
 		expect(noopCommand()).toBe('NOOP')
 	})
 })

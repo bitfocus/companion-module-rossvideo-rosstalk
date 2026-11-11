@@ -2,7 +2,7 @@
 
 Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix, openGear (MDK-111A-M, MDK-111A-K, MC1-MK) and Ross Video Server (Mira, Tria, Kiva) devices over RossTalk.
 
-In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk Commands reference (4802DR-403)](<https://documentation.rossvideo.com/files/Manuals/Protocol%20Documents/RossTalk-Commands(4802DR-403).pdf>) for value structures.
+In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk Commands reference](<https://documentation.rossvideo.com/files/Manuals/Protocol%20Documents/RossTalk-Commands(4802DR-403).pdf>) for value structures.
 
 This connection does not support Xpression; use the dedicated connection for Xpression instead.
 
@@ -36,7 +36,7 @@ MEs are addressed as `ME:1`, `MME:1` (MiniME) or `MSC:1` (MultiScreen). Carbonit
 - Clip player: load clip, and play / pause / eject / loop on / loop off
 - Media-Store: load media
 - Set source name (MNEM)
-- Change multiviewer box (Video Processor or I/O MultiViewer, optionally the shifted box)
+- Change multiviewer box, optionally the shifted box. The MultiViewer type defaults to None, which Carbonite Black 15.x needs (`MVBOX 1:5:IN:6`); choose VP, IO or OP if your switcher's `HELP` shows a type.
 
 With TCP Keep Alive enabled, a NOOP is sent every 30 seconds to hold the connection open.
 

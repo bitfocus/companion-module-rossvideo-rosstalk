@@ -131,10 +131,15 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 		MVBOX: {
 			name: 'Change multiviewer box',
 			options: [
-				dropdownField<'mvType', MultiviewerType>('mvType', 'MultiViewer', 'VP', [
-					{ id: 'VP', label: 'Video Processor' },
-					{ id: 'IO', label: 'I/O' },
-				]),
+				{
+					...dropdownField<'mvType', MultiviewerType | ''>('mvType', 'MultiViewer type', '', [
+						{ id: '', label: 'None' },
+						{ id: 'VP', label: 'Video Processor (VP)' },
+						{ id: 'IO', label: 'I/O (IO)' },
+						{ id: 'OP', label: 'Output (OP)' },
+					]),
+					tooltip: 'Newer software may need VP or IO, and some versions use OP for the shifted box.',
+				},
 				numberField('mvID', 'Multiviewer Number', 1, 1),
 				numberField('boxID', 'Box Number', 1, 1),
 				videoField('vidSource', 'Source', 'IN:5', VIDEO_SOURCE_CHOICES),
@@ -143,7 +148,7 @@ export function CarboniteActions(shared: SharedActions): ModelActions {
 			callback: (event) =>
 				send(
 					multiviewerBoxCommand(
-						event.options.mvType ?? 'VP',
+						event.options.mvType || null,
 						event.options.mvID,
 						event.options.boxID,
 						event.options.vidSource,

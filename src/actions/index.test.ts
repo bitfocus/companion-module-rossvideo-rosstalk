@@ -143,6 +143,10 @@ testModel('carbonite', {
 	],
 	seqFocus: [{ options: { sequencer: 3, event: 2 }, sends: 'FOCUS 3:2' }],
 	MVBOX: [
+		{ options: { mvType: '', mvID: 1, boxID: 5, vidSource: 'IN:6', shift: false }, sends: 'MVBOX 1:5:IN:6' },
+		{ options: { mvType: '', mvID: 1, boxID: 5, vidSource: 'IN:6', shift: true }, sends: 'MVBOXSHIFT 1:5:IN:6' },
+		{ options: { mvType: 'OP', mvID: 1, boxID: 5, vidSource: 'IN:6', shift: true }, sends: 'MVBOXSHIFT OP:1:5:IN:6' },
+		{ options: { mvID: 1, boxID: 5, vidSource: 'IN:6' }, sends: 'MVBOX 1:5:IN:6' },
 		{ options: { mvType: 'VP', mvID: 1, boxID: 5, vidSource: 'IN:6', shift: false }, sends: 'MVBOX VP:1:5:IN:6' },
 		{ options: { mvType: 'VP', mvID: 1, boxID: 5, vidSource: 'IN:6', shift: true }, sends: 'MVBOXSHIFT VP:1:5:IN:6' },
 		{ options: { mvType: 'IO', mvID: 2, boxID: 1, vidSource: 'AUX:3', shift: false }, sends: 'MVBOX IO:2:1:AUX:3' },
