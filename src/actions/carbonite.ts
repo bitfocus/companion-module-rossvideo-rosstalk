@@ -25,6 +25,7 @@ import {
 } from '../commands.js'
 import {
 	dropdownField,
+	ME_SOURCE_PATTERN,
 	mleField,
 	numberField,
 	RE_ME_SOURCE,
@@ -37,7 +38,7 @@ import type { ModelActions } from './index.js'
 import type { SharedActions } from './shared.js'
 
 // Bank and memory are one digit each, e.g. 19 is bank 1 memory 9, followed by MEs and/or chroma keys
-export const RE_MEMORY = '/^[0-9]{2}(:(ME|MME|MSC):([0-9]{1,2}|P\\/P)|:CK:[0-9]{1,2})+$/'
+export const RE_MEMORY = `/^[0-9]{2}(:(${ME_SOURCE_PATTERN})|:CK:[0-9]{1,2})+$/`
 
 const setDriveField = dropdownField<'drive', Ultra60Drive | ''>('drive', 'Drive (Ultra 60 only)', '', [
 	{ id: '', label: 'Default' },

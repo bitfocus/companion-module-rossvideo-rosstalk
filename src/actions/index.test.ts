@@ -98,6 +98,7 @@ testModel('carbonite', {
 	cut: [
 		{ options: { mle: 'ME:1' }, sends: 'MECUT ME:1' },
 		{ options: { mle: 'ME:P/P' }, sends: 'MECUT ME:P/P' },
+		{ options: { mle: 'ME:1B' }, sends: 'MECUT ME:1B' },
 	],
 	autotrans: [{ options: { mle: 'MSC:2' }, sends: 'MEAUTO MSC:2' }],
 	transRate: [{ options: { mle: 'ME:1', rate: 15 }, sends: 'TRANSRATE ME:1:15' }],
@@ -341,13 +342,19 @@ describe('actions that send nothing', () => {
 
 describe('option validation', () => {
 	const cases: [Model, ActionId, string, string[], string[]][] = [
-		['carbonite', 'cut', 'mle', ['ME:1', 'MME:2', 'MSC:2', 'ME:P/P', 'ME:10'], ['ME', '1', 'ME:1:2', 'IN:1']],
+		[
+			'carbonite',
+			'cut',
+			'mle',
+			['ME:1', 'MME:2', 'MSC:2', 'ME:P/P', 'ME:10', 'ME:1A', 'ME:1B', 'ME:PP', 'ME:PPB', 'ME:PPAB'],
+			['ME', '1', 'ME:1:2', 'IN:1', 'ME:1C', 'ME:1BA', 'MME:1B', 'ME:P/PB'],
+		],
 		[
 			'carbonite',
 			'MEM',
 			'memID',
-			['19:ME:2:MME:1:CK:1', '25:ME:1:MME:3', '11:ME:P/P', '19:CK:1'],
-			['19', '1:ME:1', '19:CK', '19:IN:1', '19:ME:1:'],
+			['19:ME:2:MME:1:CK:1', '25:ME:1:MME:3', '11:ME:P/P', '19:CK:1', '19:ME:PPB', '19:ME:1A:ME:2'],
+			['19', '1:ME:1', '19:CK', '19:IN:1', '19:ME:1:', '19:MME:1B'],
 		],
 		['carbonite', 'memSave', 'memID', ['25:ME:1:MME:3'], ['25']],
 		['carbonite', 'mediaStore', 'mediaId', ['002', '035'], ['', 'abc', '1.5']],

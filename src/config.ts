@@ -30,14 +30,14 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 		{
 			type: 'textinput',
 			id: 'host',
-			label: 'Switcher Frame IP / Hostname',
+			label: 'Device IP / Hostname',
 			width: 6,
 			regex: Regex.HOSTNAME,
 		},
 		{
 			type: 'number',
 			id: 'port',
-			label: 'Switcher Frame Port',
+			label: 'Device Port',
 			width: 6,
 			default: DEFAULT_PORT,
 			min: 1,

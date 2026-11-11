@@ -2,24 +2,26 @@
 
 Controls Ross Video Carbonite/Graphite, Acuity/Vision, Ultrix, openGear (MDK-111A-M, MDK-111A-K, MC1-MK) and Ross Video Server (Mira, Tria, Kiva) devices over RossTalk.
 
-In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk reference manual](http://help.rossvideo.com/carbonite-device/Topics/Protocol/RossTalk/CNT/RT-CNT-Comm.html) for value structures.
+In most cases, convenient dropdowns are provided for options. If you'd like to use variables, expressions, or custom values, refer to the [RossTalk Commands reference (4802DR-403)](<https://documentation.rossvideo.com/files/Manuals/Protocol%20Documents/RossTalk-Commands(4802DR-403).pdf>) for value structures.
 
 This connection does not support Xpression; use the dedicated connection for Xpression instead.
 
 ### Configuration
 
 - **Model**: selects which actions and presets are available.
-- **Switcher Frame IP / Hostname** and **Port** (default 7788).
+- **Device IP / Hostname** and **Device Port** (default 7788).
 - **TCP Keep Alive**: when enabled, a single connection is kept open and the connection status is shown continuously. When disabled, a connection is opened for each button press; commands fired together share that connection, and the status reflects the most recent attempt.
 
 ### Actions
 
 **All models**
 
-- Trigger GPI and Trigger GPI by Name (only works on devices that accept named GPIs); not available for video servers
+- Trigger GPI and Trigger GPI by Name (only works on devices that accept named GPIs); not available for video servers. On Graphite, use Trigger GPI by Name with a parameter of `HIGH` or `LOW` to trigger on a signal edge, e.g. name `08` and parameter `HIGH` sends `GPI 08:HIGH`.
 - Send a custom command
 
 **Carbonite / Graphite**
+
+MEs are addressed as `ME:1`, `MME:1` (MiniME) or `MSC:1` (MultiScreen). Carbonite Ultra's program ME is `ME:P/P`, and HyperMax split-ME sides can be typed as `ME:1A`, `ME:1B`, `ME:1AB` or `ME:PPB`.
 
 - Fire custom control
 - Load Set / Save Set (with an optional drive for Ultra 60)
